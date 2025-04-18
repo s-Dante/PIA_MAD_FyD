@@ -10,20 +10,21 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PIA_MAD_FyD.Helpers;
 
 namespace PIA_MAD_FyD.ToolTips_PopUps
 {
     public partial class PasswordCheck: Form
     {
+        private BorderRadius borderRadius = new BorderRadius();
+
         public PasswordCheck()
         {
             InitializeComponent();
-            this.Opacity = 0.98;
-
-            this.Paint += PasswordCheck_Paint;
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint |
-              ControlStyles.UserPaint |
-              ControlStyles.OptimizedDoubleBuffer, true);
+            this.Opacity = 1;
+            borderRadius.TargetControl = this;
+            borderRadius.CornerRadius = 20; 
+            borderRadius.CornersToRound = BorderRadius.RoundedCorners.All;
         }
 
         private void PasswordCheck_Load(object sender, EventArgs e)
@@ -52,43 +53,5 @@ namespace PIA_MAD_FyD.ToolTips_PopUps
             label4.Text = digit ? "✔️ Al menos un dígito" : "❌ Al menos un dígito";
             label5.Text = specialChar ? "✔️ Al menos un carácter especial" : "❌ Al menos un carácter especial";
         }
-
-        // Evento Paint para bordes suaves
-        private void PasswordCheck_Paint(object sender, PaintEventArgs e)
-        {
-            int radius = 15;  // Aumentamos el radio para una mejor curva
-            Graphics g = e.Graphics;
-
-            g.SmoothingMode = SmoothingMode.HighQuality; // Mayor suavidad en el renderizado
-
-            using (GraphicsPath path = GetRoundedPath(this.ClientRectangle, radius))
-            {
-                using (SolidBrush brush = new SolidBrush(this.BackColor)) // Fondo del formulario
-                {
-                    g.FillPath(brush, path); // Dibuja el fondo de forma redondeada
-                }
-
-                using (Pen borderPen = new Pen(Color.FromArgb(180, 180, 180), 2)) // Borde más limpio
-                {
-                    g.DrawPath(borderPen, path);
-                }
-
-                this.Region = new Region(path); // Aplica el recorte al formulario
-            }
-        }
-
-
-        // Método para crear el borde redondeado
-        private GraphicsPath GetRoundedPath(Rectangle rect, int radius)
-        {
-            GraphicsPath path = new GraphicsPath();
-            path.AddArc(rect.Left, rect.Top, radius * 2, radius * 2, 180, 90);
-            path.AddArc(rect.Right - (radius * 2), rect.Top, radius * 2, radius * 2, 270, 90);
-            path.AddArc(rect.Right - (radius * 2), rect.Bottom - (radius * 2), radius * 2, radius * 2, 0, 90);
-            path.AddArc(rect.Left, rect.Bottom - (radius * 2), radius * 2, radius * 2, 90, 90);
-            path.CloseFigure();
-            return path;
-        }
-
     }
 }

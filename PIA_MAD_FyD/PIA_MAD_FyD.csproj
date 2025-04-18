@@ -111,6 +111,12 @@
     <Compile Include="Forms\Operatives\Operatividad.Designer.cs">
       <DependentUpon>Operatividad.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BorderRadius.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Helpers\BorderRadius.Designer.cs">
+      <DependentUpon>BorderRadius.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\FormManager\FormManager.cs" />
     <Compile Include="Helpers\Validations\Validate_CodigoPostal.cs" />
     <Compile Include="Helpers\Validations\Validate_Correo.cs" />
@@ -138,11 +144,53 @@
     <Compile Include="ToolTips&amp;PopUps\PasswordCheck.Designer.cs">
       <DependentUpon>PasswordCheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_PerfilUsuario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_PerfilUsuario.Designer.cs">
+      <DependentUpon>uc_PerfilUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarHotel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarHotel.Designer.cs">
+      <DependentUpon>uc_RegistrarHotel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarUsuario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarUsuario.Designer.cs">
+      <DependentUpon>uc_RegistrarUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ReporteOcupacion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ReporteOcupacion.Designer.cs">
+      <DependentUpon>uc_ReporteOcupacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\UC_NavBarAdmin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\UC_NavBarAdmin.Designer.cs">
+      <DependentUpon>UC_NavBarAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Shared\TopPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Shared\TopPanel.Designer.cs">
+      <DependentUpon>TopPanel.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Cambiar_Pswd.resx">
       <DependentUpon>Cambiar_Pswd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Admin\Administracion.resx">
+      <DependentUpon>Administracion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Operatives\Operatividad.resx">
+      <DependentUpon>Operatividad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -161,6 +209,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ToolTips&amp;PopUps\PasswordCheck.resx">
       <DependentUpon>PasswordCheck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_PerfilUsuario.resx">
+      <DependentUpon>uc_PerfilUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_RegistrarHotel.resx">
+      <DependentUpon>uc_RegistrarHotel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_RegistrarUsuario.resx">
+      <DependentUpon>uc_RegistrarUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_ReporteOcupacion.resx">
+      <DependentUpon>uc_ReporteOcupacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\UC_NavBarAdmin.resx">
+      <DependentUpon>UC_NavBarAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Shared\TopPanel.resx">
+      <DependentUpon>TopPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -182,9 +248,7 @@
     <Folder Include="Forms\Shared\" />
     <Folder Include="Helpers\Validations\ValidateForPopUps\" />
     <Folder Include="Services\" />
-    <Folder Include="UserControls\Admin\" />
-    <Folder Include="UserControls\Operatives\" />
-    <Folder Include="UserControls\Shared\" />
+    <Folder Include="UserControls\Operatives\MainPanels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

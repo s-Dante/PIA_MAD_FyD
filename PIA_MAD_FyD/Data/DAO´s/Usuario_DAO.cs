@@ -157,6 +157,43 @@ namespace PIA_MAD_FyD.Data.DAO_s
             }
         }
 
+        //Metodo para saber que usuario es el que se logeo
+        public static Usuario ObtenerUsuarioLogeado(string correo)
+        {
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand comando = new SqlCommand("sp_UsuarioLogeado", conexion);
+                comando.CommandType = CommandType.StoredProcedure;
+                comando.Parameters.AddWithValue("@correoIngresado", correo);
+                using (SqlDataReader reader = comando.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Usuario
+                        {
+                            num_Nomina = Convert.ToInt32(reader["num_Nomina"]),
+                            nombre = reader["nombre"].ToString(),
+                            apellido_Paterno = reader["apellido_Paterno"].ToString(),
+                            apellido_Materno = reader["apellido_Materno"].ToString(),
+                            correo = reader["correo"].ToString(),
+                            fecha_Nacimiento = Convert.ToDateTime(reader["fecha_Nacimiento"]),
+                            telefono = reader["telefono"].ToString(),
+                            tipo_Usuario = Convert.ToChar(reader["tipo_Usuario"]),
+                            fecha_Registro = Convert.ToDateTime(reader["fecha_Registro"]),
+                            fecha_Modificaion = Convert.ToDateTime(reader["fecha_Modificacion"]),
+                            estatus = Convert.ToChar(reader["estatus"]),
+                            usuario_Registrador = Convert.ToInt32(reader["usuario_Registrador"]),
+                            usuario_Modifico = Convert.ToInt32(reader["usuario_Modifico"])
+                        };
+                    }
+                    else
+                    { 
+                        return null; // No se encontró el usuario
+                    }
+                }
+            }
+        }
+
 
     }
 }

@@ -12,7 +12,7 @@ namespace PIA_MAD_FyD.Helpers.FormManager
         private static Dictionary<Type, Form> forms = new Dictionary<Type, Form>();
 
         // ✅ Mostrar formulario (verifica si ya existe)
-        public static Form ShowForm<T>(Form currentForm = null, bool cerrarAppAlCerrar = false, bool ocultarActual = false) where T : Form, new()
+        public static Form ShowForm<T>(Form currentForm = null, bool cerrarAppAlCerrar = false, bool ocultarActual = false, params object[] args) where T : Form
         {
             Form form;
 
@@ -24,7 +24,8 @@ namespace PIA_MAD_FyD.Helpers.FormManager
             }
             else
             {
-                form = new T();
+                // Usar reflexión para llamar al constructor adecuado
+                form = (Form)Activator.CreateInstance(typeof(T), args);
                 form.FormClosed += (s, e) => forms.Remove(typeof(T));
 
                 if (cerrarAppAlCerrar)
@@ -41,6 +42,7 @@ namespace PIA_MAD_FyD.Helpers.FormManager
             form.Show();
             return form;
         }
+
 
 
         // ✅ Verificar si el formulario ya existe

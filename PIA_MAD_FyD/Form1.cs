@@ -10,6 +10,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PIA_MAD_FyD.Data.DAO_s;
+using PIA_MAD_FyD.Data.Entidades;
+using PIA_MAD_FyD.Forms.Admin;
+using PIA_MAD_FyD.Forms.Operatives;
 using PIA_MAD_FyD.Helpers.FormManager;
 using PIA_MAD_FyD.Helpers.Validations;
 using PIA_MAD_FyD.ToolTips_PopUps;
@@ -44,34 +47,43 @@ namespace PIA_MAD_FyD
             string correo = textBox1.Text;
             string contrasena = textBox2.Text;
 
-            try
+            if(textBox1.Text == "" || textBox2.Text == "")
             {
-                inicioSesion resultado = Usuario_DAO.InicioSesion(correo, contrasena);
-
-                switch (resultado)
+                MessageBox.Show("Por favor, completa todos los campos.");
+                return;
+            }else
+            {
+                try
                 {
-                    case inicioSesion.ExitosoAdmin:
-                        MessageBox.Show("Inicio de sesión exitoso: Administrador");
-                        // Redirigir al FORMS de administrador
-                        break;
-                    case inicioSesion.ExitosoOperativo:
-                        MessageBox.Show("Inicio de sesión exitoso: Operativo");
-                        // Redirigir al FORMS operativo
-                        break;
-                    case inicioSesion.FallidoContrasena:
-                        MessageBox.Show("Contraseña incorrecta. Intenta nuevamente.");
-                        break;
-                    case inicioSesion.NoRegistrado:
-                        MessageBox.Show("Usuario no registrado.");
-                        break;
-                    default:
-                        MessageBox.Show("Error desconocido.");
-                        break;
+                    inicioSesion resultado = Usuario_DAO.InicioSesion(correo, contrasena);
+                    Usuario usuario = Usuario_DAO.ObtenerUsuarioLogeado(correo);
+                    switch (resultado)
+                    {
+                        case inicioSesion.ExitosoAdmin:
+                            // Redirigir al FORMS de administrador
+                            FormManager.ShowForm<Administracion>(this, cerrarAppAlCerrar: true, ocultarActual: true, usuario);
+                            FormManager.ListForms();
+                            break;
+                        case inicioSesion.ExitosoOperativo:
+                            // Redirigir al FORMS 
+                            FormManager.ShowForm<Operatividad>(this, cerrarAppAlCerrar: true, ocultarActual: true, usuario);
+                            FormManager.ListForms();
+                            break;
+                        case inicioSesion.FallidoContrasena:
+                            MessageBox.Show("Contraseña incorrecta. Intenta nuevamente.");
+                            break;
+                        case inicioSesion.NoRegistrado:
+                            MessageBox.Show("Usuario no registrado.");
+                            break;
+                        default:
+                            MessageBox.Show("Error desconocido.");
+                            break;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
             }
 
         }

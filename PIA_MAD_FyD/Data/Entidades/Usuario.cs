@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PIA_MAD_FyD.Data.Entidades
 {
-    class Usuario
+    public class Usuario
     {
         public int num_Nomina { get; set; }
         public string nombre { get; set; }
