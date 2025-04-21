@@ -125,17 +125,17 @@ namespace PIA_MAD_FyD.Data.DAO_s
         }
 
         //Metodo para actualizar la contraseña
-        public static void ActualizarContrasena(string correo, string nuevaContrasena)
-        {
-            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
-            {
-                SqlCommand comando = new SqlCommand("sp_ActualizarContrasena", conexion);
-                comando.CommandType = CommandType.StoredProcedure;
-                comando.Parameters.AddWithValue("@correo", correo);
-                comando.Parameters.AddWithValue("@nuevaContrasena", nuevaContrasena);
-                comando.ExecuteNonQuery();
-            }
-        }
+        //public static void ActualizarContrasena(string correo, string nuevaContrasena)
+        //{
+        //    using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+        //    {
+        //        SqlCommand comando = new SqlCommand("sp_ActualizarContrasena", conexion);
+        //        comando.CommandType = CommandType.StoredProcedure;
+        //        comando.Parameters.AddWithValue("@correo", correo);
+        //        comando.Parameters.AddWithValue("@nuevaContrasena", nuevaContrasena);
+        //        comando.ExecuteNonQuery();
+        //    }
+        //}
 
         public static void CambiarContraseña(string correo, string nuevaContrasena)
         {

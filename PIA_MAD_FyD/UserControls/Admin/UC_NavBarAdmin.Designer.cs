@@ -31,10 +31,15 @@ namespace PIA_MAD_FyD.UserControls.Admin
         private Button button5;
         private Button button6;
         private Button button7;
+        private Panel panel4;
+        private Button button12;
+        private Button button13;
+        private Button button14;
         private Panel panel3;
         private Button button11;
         private Button button8;
         private Button button9;
         private Button button10;
+        private Button button15;
     }
 }

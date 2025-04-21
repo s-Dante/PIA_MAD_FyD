@@ -144,11 +144,47 @@
     <Compile Include="ToolTips&amp;PopUps\PasswordCheck.Designer.cs">
       <DependentUpon>PasswordCheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_Cancelaciones.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_Cancelaciones.Designer.cs">
+      <DependentUpon>uc_Cancelaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_HistorialCliente.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_HistorialCliente.Designer.cs">
+      <DependentUpon>uc_HistorialCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ModificarHabitacion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ModificarHabitacion.Designer.cs">
+      <DependentUpon>uc_ModificarHabitacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ModificarHotel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ModificarHotel.Designer.cs">
+      <DependentUpon>uc_ModificarHotel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ModificarUsuario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ModificarUsuario.Designer.cs">
+      <DependentUpon>uc_ModificarUsuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Admin\MainPanels\uc_PerfilUsuario.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Admin\MainPanels\uc_PerfilUsuario.Designer.cs">
       <DependentUpon>uc_PerfilUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarHabitacion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarHabitacion.Designer.cs">
+      <DependentUpon>uc_RegistrarHabitacion.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Admin\MainPanels\uc_RegistrarHotel.cs">
       <SubType>UserControl</SubType>
@@ -168,11 +204,53 @@
     <Compile Include="UserControls\Admin\MainPanels\uc_ReporteOcupacion.Designer.cs">
       <DependentUpon>uc_ReporteOcupacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ReporteVentas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Admin\MainPanels\uc_ReporteVentas.Designer.cs">
+      <DependentUpon>uc_ReporteVentas.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Admin\UC_NavBarAdmin.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Admin\UC_NavBarAdmin.Designer.cs">
       <DependentUpon>UC_NavBarAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_CheckIn.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_CheckIn.Designer.cs">
+      <DependentUpon>uc_CheckIn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_CheckOut.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_CheckOut.Designer.cs">
+      <DependentUpon>uc_CheckOut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_ModificarCliente.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_ModificarCliente.Designer.cs">
+      <DependentUpon>uc_ModificarCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_RegistrarCliente.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_RegistrarCliente.Designer.cs">
+      <DependentUpon>uc_RegistrarCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_Reservaciones.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Operatives\MainPanels\uc_Reservaciones.Designer.cs">
+      <DependentUpon>uc_Reservaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Operatives\UC_NavBarOp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Operatives\UC_NavBarOp.Designer.cs">
+      <DependentUpon>UC_NavBarOp.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Shared\TopPanel.cs">
       <SubType>UserControl</SubType>
@@ -200,6 +278,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Registro_NoLogIn.resx">
       <DependentUpon>Registro_NoLogIn.cs</DependentUpon>
@@ -210,8 +289,26 @@
     <EmbeddedResource Include="ToolTips&amp;PopUps\PasswordCheck.resx">
       <DependentUpon>PasswordCheck.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_Cancelaciones.resx">
+      <DependentUpon>uc_Cancelaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_HistorialCliente.resx">
+      <DependentUpon>uc_HistorialCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_ModificarHabitacion.resx">
+      <DependentUpon>uc_ModificarHabitacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_ModificarHotel.resx">
+      <DependentUpon>uc_ModificarHotel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_ModificarUsuario.resx">
+      <DependentUpon>uc_ModificarUsuario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_PerfilUsuario.resx">
       <DependentUpon>uc_PerfilUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_RegistrarHabitacion.resx">
+      <DependentUpon>uc_RegistrarHabitacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_RegistrarHotel.resx">
       <DependentUpon>uc_RegistrarHotel.cs</DependentUpon>
@@ -222,8 +319,29 @@
     <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_ReporteOcupacion.resx">
       <DependentUpon>uc_ReporteOcupacion.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Admin\MainPanels\uc_ReporteVentas.resx">
+      <DependentUpon>uc_ReporteVentas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Admin\UC_NavBarAdmin.resx">
       <DependentUpon>UC_NavBarAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Operatives\MainPanels\uc_CheckIn.resx">
+      <DependentUpon>uc_CheckIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Operatives\MainPanels\uc_CheckOut.resx">
+      <DependentUpon>uc_CheckOut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Operatives\MainPanels\uc_ModificarCliente.resx">
+      <DependentUpon>uc_ModificarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Operatives\MainPanels\uc_RegistrarCliente.resx">
+      <DependentUpon>uc_RegistrarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Operatives\MainPanels\uc_Reservaciones.resx">
+      <DependentUpon>uc_Reservaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Operatives\UC_NavBarOp.resx">
+      <DependentUpon>UC_NavBarOp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Shared\TopPanel.resx">
       <DependentUpon>TopPanel.cs</DependentUpon>
@@ -237,6 +355,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Services\CountryData\countries+states+cities.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -244,11 +363,18 @@
   <ItemGroup>
     <Folder Include="Assets\Fonts\" />
     <Folder Include="Assets\Icons\" />
-    <Folder Include="Assets\Imgs\" />
     <Folder Include="Forms\Shared\" />
     <Folder Include="Helpers\Validations\ValidateForPopUps\" />
-    <Folder Include="Services\" />
-    <Folder Include="UserControls\Operatives\MainPanels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Imgs\DaferCorpLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Imgs\DaferCorpLogoANDText.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

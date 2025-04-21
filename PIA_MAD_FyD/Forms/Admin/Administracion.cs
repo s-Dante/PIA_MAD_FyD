@@ -29,7 +29,7 @@ namespace PIA_MAD_FyD.Forms.Admin
         private void Administracion_Load(object sender, EventArgs e)
         {
             string rutaProyecto = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\"));
-            string rutaLogo = Path.Combine(rutaProyecto, "Assets", "Imgs", "dafer1.png");
+            string rutaLogo = Path.Combine(rutaProyecto, "Assets", "Imgs", "DaferCorpLogo.png");
 
             topPanel.Dock = DockStyle.Top;
             topPanel.Logo = Image.FromFile(rutaLogo);
@@ -53,23 +53,38 @@ namespace PIA_MAD_FyD.Forms.Admin
 
             switch (opcion)
             {
-                case "Usuarios":
+                case "Perfil":
                     controlAMostrar = new uc_PerfilUsuario();
                     break;
                 case "RegistrarUsuario":
                     controlAMostrar = new uc_RegistrarUsuario();
                     break;
                 case "ModificarUsuario":
-                    //controlAMostrar = new uc_ModificarUsuario();
+                    controlAMostrar = new uc_ModificarUsuario();
                     break;
                 case "RegistrarHotel":
                     controlAMostrar = new uc_RegistrarHotel();
                     break;
                 case "ModificarHotel":
-                    //controlAMostrar = new uc_ModificarHotel();
+                    controlAMostrar = new uc_ModificarHotel();
+                    break;
+                case "RegistrarHabitacion":
+                    controlAMostrar = new uc_RegistrarHabitacion();
+                    break;
+                case "ModificarHabitacion":
+                    controlAMostrar = new uc_ModificarHabitacion();
                     break;
                 case "ReporteOcupacion":
                     controlAMostrar = new uc_ReporteOcupacion();
+                    break;
+                case "ReporteVentas":
+                    controlAMostrar = new uc_ReporteVentas();
+                    break;
+                case "HistorialCliente":
+                    controlAMostrar = new uc_HistorialCliente();
+                    break;
+                case "Cancelaciones":
+                    controlAMostrar = new uc_Cancelaciones();
                     break;
             }
             if (controlAMostrar != null)

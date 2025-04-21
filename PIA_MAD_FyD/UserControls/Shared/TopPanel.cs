@@ -32,7 +32,9 @@ namespace PIA_MAD_FyD.UserControls.Shared
 
             // Puedes también actualizar la hora y fecha aquí si lo deseas
             label3.Text = DateTime.Now.ToString("HH:mm");
-            label4.Text = DateTime.Now.ToString("d/MMM/yyyy"); // si decides incluirlo
+            label4.Text = DateTime.Now.ToString("d/MMM/yyyy");
+
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
         }
 
 

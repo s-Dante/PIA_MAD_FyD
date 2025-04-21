@@ -55,10 +55,9 @@
             // 
             // panel3
             // 
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(233, 81);
+            this.panel3.Location = new System.Drawing.Point(258, 104);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1199, 772);
+            this.panel3.Size = new System.Drawing.Size(1149, 722);
             this.panel3.TabIndex = 2;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
