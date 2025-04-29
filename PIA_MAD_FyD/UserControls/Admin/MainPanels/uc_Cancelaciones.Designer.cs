@@ -32,11 +32,10 @@
             // 
             // uc_Cancelaciones
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.RosyBrown;
             this.Name = "uc_Cancelaciones";
-            this.Size = new System.Drawing.Size(1199, 772);
+            this.Size = new System.Drawing.Size(1149, 722);
             this.ResumeLayout(false);
 
         }

@@ -45,7 +45,7 @@ namespace PIA_MAD_FyD.Forms.Admin
 
         private void Uc_NavBarAdmin_OnMenuSelected(object sender, string opcion)
         {
-            MessageBox.Show("Opción seleccionada: " + opcion); // <- Verifica esto
+            //MessageBox.Show("Opción seleccionada: " + opcion); // <- Verifica esto
 
             panel3.Controls.Clear();
 

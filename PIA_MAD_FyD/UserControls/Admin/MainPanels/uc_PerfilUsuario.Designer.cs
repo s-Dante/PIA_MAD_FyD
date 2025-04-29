@@ -55,10 +55,9 @@
             // 
             // radioButton2
             // 
-            this.radioButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.radioButton2.AutoSize = true;
             this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.Location = new System.Drawing.Point(975, 355);
+            this.radioButton2.Location = new System.Drawing.Point(925, 355);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(118, 29);
             this.radioButton2.TabIndex = 39;
@@ -68,10 +67,9 @@
             // 
             // radioButton1
             // 
-            this.radioButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.radioButton1.AutoSize = true;
             this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(811, 353);
+            this.radioButton1.Location = new System.Drawing.Point(761, 353);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(153, 29);
             this.radioButton1.TabIndex = 37;
@@ -81,10 +79,9 @@
             // 
             // label10
             // 
-            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(638, 353);
+            this.label10.Location = new System.Drawing.Point(588, 353);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(150, 25);
             this.label10.TabIndex = 40;
@@ -95,7 +92,7 @@
             this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox8.Location = new System.Drawing.Point(181, 242);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(362, 30);
+            this.textBox8.Size = new System.Drawing.Size(316, 30);
             this.textBox8.TabIndex = 29;
             // 
             // label9
@@ -113,7 +110,7 @@
             this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox7.Location = new System.Drawing.Point(181, 184);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(362, 30);
+            this.textBox7.Size = new System.Drawing.Size(316, 30);
             this.textBox7.TabIndex = 28;
             // 
             // label8
@@ -128,18 +125,16 @@
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePicker1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(811, 244);
+            this.dateTimePicker1.Location = new System.Drawing.Point(761, 244);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(326, 30);
             this.dateTimePicker1.TabIndex = 34;
             // 
             // textBox6
             // 
-            this.textBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox6.Location = new System.Drawing.Point(811, 295);
+            this.textBox6.Location = new System.Drawing.Point(761, 295);
             this.textBox6.Name = "textBox6";
             this.textBox6.PasswordChar = '*';
             this.textBox6.Size = new System.Drawing.Size(327, 30);
@@ -147,10 +142,9 @@
             // 
             // label7
             // 
-            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(559, 296);
+            this.label7.Location = new System.Drawing.Point(509, 296);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(229, 25);
             this.label7.TabIndex = 26;
@@ -158,18 +152,16 @@
             // 
             // textBox5
             // 
-            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(810, 180);
+            this.textBox5.Location = new System.Drawing.Point(760, 180);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(327, 30);
             this.textBox5.TabIndex = 33;
             // 
             // textBox4
             // 
-            this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(810, 120);
+            this.textBox4.Location = new System.Drawing.Point(760, 120);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(327, 30);
             this.textBox4.TabIndex = 32;
@@ -180,7 +172,7 @@
             this.textBox3.Location = new System.Drawing.Point(181, 356);
             this.textBox3.Name = "textBox3";
             this.textBox3.PasswordChar = '*';
-            this.textBox3.Size = new System.Drawing.Size(362, 30);
+            this.textBox3.Size = new System.Drawing.Size(316, 30);
             this.textBox3.TabIndex = 31;
             // 
             // textBox2
@@ -188,7 +180,7 @@
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox2.Location = new System.Drawing.Point(181, 299);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(362, 30);
+            this.textBox2.Size = new System.Drawing.Size(316, 30);
             this.textBox2.TabIndex = 30;
             // 
             // textBox1
@@ -196,15 +188,14 @@
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(181, 120);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(362, 30);
+            this.textBox1.Size = new System.Drawing.Size(316, 30);
             this.textBox1.TabIndex = 27;
             // 
             // label6
             // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(592, 239);
+            this.label6.Location = new System.Drawing.Point(542, 239);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(196, 25);
             this.label6.TabIndex = 25;
@@ -212,10 +203,9 @@
             // 
             // label5
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(693, 180);
+            this.label5.Location = new System.Drawing.Point(643, 180);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(95, 25);
             this.label5.TabIndex = 24;
@@ -233,10 +223,9 @@
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(658, 123);
+            this.label3.Location = new System.Drawing.Point(608, 123);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(130, 25);
             this.label3.TabIndex = 23;
@@ -268,7 +257,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(548, 454);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(128, 55);
+            this.button2.Size = new System.Drawing.Size(106, 55);
             this.button2.TabIndex = 41;
             this.button2.Text = "Modificar";
             this.button2.UseVisualStyleBackColor = true;
@@ -277,17 +266,16 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(988, 618);
+            this.button1.Location = new System.Drawing.Point(988, 568);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 55);
+            this.button1.Size = new System.Drawing.Size(106, 55);
             this.button1.TabIndex = 42;
             this.button1.Text = "Guardar Cambios";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // uc_PerfilUsuario
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.RosyBrown;
             this.Controls.Add(this.button1);
             this.Controls.Add(this.button2);
@@ -315,7 +303,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "uc_PerfilUsuario";
-            this.Size = new System.Drawing.Size(1199, 772);
+            this.Size = new System.Drawing.Size(1149, 722);
             this.Load += new System.EventHandler(this.uc_PerfilUsuario_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

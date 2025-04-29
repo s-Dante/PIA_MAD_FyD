@@ -47,7 +47,7 @@ namespace PIA_MAD_FyD.Forms.Operatives
         //Evento para seleccionar el menú
         private void Uc_NavBarAdmin_OnMenuSelected(object sender, string opcion)
         {
-            MessageBox.Show("Opción seleccionada: " + opcion); // <- Verifica esto
+            //MessageBox.Show("Opción seleccionada: " + opcion); // <- Verifica esto
 
             panel3.Controls.Clear();
 
