@@ -34,12 +34,17 @@ namespace PIA_MAD_FyD
         private bool correoBien = false;
         private string claveAcceso = "ADMIN";
         private bool isAdmin = false;
+
+        private bool isResetting = false;
+
         public Registro_NoLogIn()
         {
             InitializeComponent();
             this.FormClosed += Registro_NoLogIn_FormClosed;
             emailCheck = new EmailCheck();
             this.Controls.Add(emailCheck); // Agregar el tooltip al 
+
+            textBox5.KeyPress += textBox5_KeyPress;
         }
 
         //Return to the main Form
@@ -68,6 +73,7 @@ namespace PIA_MAD_FyD
         {
             FormManager.ShowHiddenForm<Form1>(); // Muestra todos los formularios ocultos
         }
+
         //Nombre
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -90,6 +96,8 @@ namespace PIA_MAD_FyD
         //Correo
         private async void textBox2_TextChanged(object sender, EventArgs e)
         {
+            if (isResetting) return;
+
             string correo = textBox2.Text.Trim();
             correoBien = Validate_Correo.EsCorreoValido(correo);
             if (correoBien)
@@ -119,6 +127,8 @@ namespace PIA_MAD_FyD
         //Contraseña
         private async void textBox3_TextChanged(object sender, EventArgs e)
         {
+            if (isResetting) return;
+
             if (pswdCheck == null || pswdCheck.IsDisposed) // Crear el popup si no existe
             {
                 pswdCheck = new PasswordCheck();
@@ -141,14 +151,21 @@ namespace PIA_MAD_FyD
             bool digit = password.Any(char.IsDigit);
             bool specialChar = password.Any(ch => !char.IsLetterOrDigit(ch));
 
-            pswdCheck.UpdateValidation(length, uppercase, lowercase, digit, specialChar);
+            if (pswdCheck != null && !pswdCheck.IsDisposed)
+            {
+                pswdCheck.UpdateValidation(length, uppercase, lowercase, digit, specialChar);
+            }
+
 
             // Ocultar el popup si la contraseña ya es válida
             if (length && uppercase && lowercase && digit && specialChar)
             {
                 await Task.Delay(800);
-                pswdCheck.Close();
-                pswdCheck = null; // Liberar referencia
+                if (pswdCheck != null && !pswdCheck.IsDisposed)
+                {
+                    pswdCheck.Close();
+                    pswdCheck = null;
+                }
             }
         }
 
@@ -179,6 +196,16 @@ namespace PIA_MAD_FyD
 
             textBox5.Text = input;
             textBox5.SelectionStart = textBox5.Text.Length; // Mantener el cursor al final
+        }
+
+        // Validar que solo se ingresen números en el TextBox
+        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo dígitos y teclas de control (como backspace)
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Cancela la entrada del carácter
+            }
         }
 
         //Fecha de Nacimiento
@@ -337,6 +364,24 @@ namespace PIA_MAD_FyD
             {
                 MessageBox.Show("La clave de acceso es incorrecta. No se puede registrar el usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            isResetting = true;
+
+            // Limpiar los campos después de registrar
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox4.Clear();
+            textBox5.Clear();
+            textBox6.Clear();
+            textBox7.Clear();
+            textBox8.Clear();
+            dateTimePicker1.Value = DateTime.Now;
+            radioButton1.Checked = false;
+            radioButton2.Checked = false;
+
+            emailCheck.Visible = false;
+            isResetting = false;
         }
 
         private void label7_Click(object sender, EventArgs e)

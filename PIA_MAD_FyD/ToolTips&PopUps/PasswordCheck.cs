@@ -41,17 +41,32 @@ namespace PIA_MAD_FyD.ToolTips_PopUps
 
         public void UpdateValidation(bool length, bool uppercase, bool lowercase, bool digit, bool specialChar)
         {
-            label1.ForeColor = length ? Color.Green : Color.Red;
-            label2.ForeColor = uppercase ? Color.Green : Color.Red;
-            label3.ForeColor = lowercase ? Color.Green : Color.Red;
-            label4.ForeColor = digit ? Color.Green : Color.Red;
-            label5.ForeColor = specialChar ? Color.Green : Color.Red;
-
-            label1.Text = length ? "✔️ Mínimo 8 caracteres" : "❌ Mínimo 8 caracteres";
-            label2.Text = uppercase ? "✔️ Al menos una mayúscula" : "❌ Al menos una mayúscula";
-            label3.Text = lowercase ? "✔️ Al menos una minúscula" : "❌ Al menos una minúscula";
-            label4.Text = digit ? "✔️ Al menos un dígito" : "❌ Al menos un dígito";
-            label5.Text = specialChar ? "✔️ Al menos un carácter especial" : "❌ Al menos un carácter especial";
+            if (label1 != null)
+            {
+                label1.ForeColor = length ? Color.Green : Color.Red;
+                label1.Text = length ? "✔️ Mínimo 8 caracteres" : "❌ Mínimo 8 caracteres";
+            }
+            if (label2 != null)
+            {
+                label2.ForeColor = uppercase ? Color.Green : Color.Red;
+                label2.Text = uppercase ? "✔️ Al menos una mayúscula" : "❌ Al menos una mayúscula";
+            }
+            if (label3 != null)
+            {
+                label3.ForeColor = lowercase ? Color.Green : Color.Red;
+                label3.Text = lowercase ? "✔️ Al menos una minúscula" : "❌ Al menos una minúscula";
+            }
+            if (label4 != null)
+            {
+                label4.ForeColor = digit ? Color.Green : Color.Red;
+                label4.Text = digit ? "✔️ Al menos un dígito" : "❌ Al menos un dígito";
+            }
+            if (label5 != null)
+            {
+                label5.ForeColor = specialChar ? Color.Green : Color.Red;
+                label5.Text = specialChar ? "✔️ Al menos un carácter especial" : "❌ Al menos un carácter especial";
+            }
         }
+
     }
 }

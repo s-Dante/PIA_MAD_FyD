@@ -54,10 +54,10 @@ namespace PIA_MAD_FyD.Forms.Admin
             switch (opcion)
             {
                 case "Perfil":
-                    controlAMostrar = new uc_PerfilUsuario();
+                    controlAMostrar = new uc_PerfilUsuario(UsuarioLogeado);
                     break;
                 case "RegistrarUsuario":
-                    controlAMostrar = new uc_RegistrarUsuario();
+                    controlAMostrar = new uc_RegistrarUsuario(UsuarioLogeado);
                     break;
                 case "ModificarUsuario":
                     controlAMostrar = new uc_ModificarUsuario();

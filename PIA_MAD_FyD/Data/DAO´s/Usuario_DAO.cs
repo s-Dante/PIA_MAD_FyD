@@ -194,6 +194,26 @@ namespace PIA_MAD_FyD.Data.DAO_s
             }
         }
 
+        //Metodo para actualizar un usuario
+        public static void ActualizarUsuario(Usuario usuario)
+        {
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand comando = new SqlCommand("sp_ActualizarUsuario", conexion);
+                comando.CommandType = CommandType.StoredProcedure;
+                comando.Parameters.AddWithValue("@num_Nomina", usuario.num_Nomina);
+                comando.Parameters.AddWithValue("@nombre", usuario.nombre);
+                comando.Parameters.AddWithValue("@apellido_Paterno", usuario.apellido_Paterno);
+                comando.Parameters.AddWithValue("@apellido_Materno", usuario.apellido_Materno);
+                comando.Parameters.AddWithValue("@correo", usuario.correo);
+                comando.Parameters.AddWithValue("@fecha_Nacimiento", usuario.fecha_Nacimiento);
+                comando.Parameters.AddWithValue("@telefono", usuario.telefono);
+                comando.Parameters.AddWithValue("@tipo_Usuario", usuario.tipo_Usuario);
+                comando.Parameters.AddWithValue("@estatus", usuario.estatus);
+                comando.Parameters.AddWithValue("@usuario_Modifico", usuario.num_Nomina);
+                comando.ExecuteNonQuery();
+            }
+        }
 
     }
 }
