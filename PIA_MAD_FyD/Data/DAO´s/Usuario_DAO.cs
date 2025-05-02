@@ -210,10 +210,39 @@ namespace PIA_MAD_FyD.Data.DAO_s
                 comando.Parameters.AddWithValue("@telefono", usuario.telefono);
                 comando.Parameters.AddWithValue("@tipo_Usuario", usuario.tipo_Usuario);
                 comando.Parameters.AddWithValue("@estatus", usuario.estatus);
-                comando.Parameters.AddWithValue("@usuario_Modifico", usuario.num_Nomina);
+                comando.Parameters.AddWithValue("@usuario_Modifico", usuario.usuario_Modifico);
                 comando.ExecuteNonQuery();
             }
         }
 
+        //Metodo para obtener todos los usuarios registrados:
+        public static List<Usuario> ObtenerUsuarios()
+        {
+            List<Usuario> usuarios = new List<Usuario>();
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand comando = new SqlCommand("sp_ObtenerUsuarios", conexion);
+                comando.CommandType = CommandType.StoredProcedure;
+                using (SqlDataReader reader = comando.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Usuario usuario = new Usuario
+                        {
+                            num_Nomina = Convert.ToInt32(reader["num_Nomina"]),
+                            nombre = reader["nombre"].ToString(),
+                            apellido_Paterno = reader["apellido_Paterno"].ToString(),
+                            apellido_Materno = reader["apellido_Materno"].ToString(),
+                            correo = reader["correo"].ToString(),
+                            fecha_Nacimiento = Convert.ToDateTime(reader["fecha_Nacimiento"]),
+                            telefono = reader["telefono"].ToString(),
+                            tipo_Usuario = Convert.ToChar(reader["tipo_Usuario"])
+                        };
+                        usuarios.Add(usuario);
+                    }
+                }
+            }
+            return usuarios;
+        }
     }
 }

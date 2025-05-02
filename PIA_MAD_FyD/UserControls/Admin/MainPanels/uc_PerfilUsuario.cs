@@ -212,6 +212,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
                     usuario.tipo_Usuario = 'A';
                 else
                     usuario.tipo_Usuario = 'O';
+                usuario.usuario_Modifico = usuario.num_Nomina;
 
 
                 //Guardar los cambios en la base de datos

@@ -16,7 +16,13 @@ namespace PIA_MAD_FyD.Data.Entidades
         public DateTime fecha_Registro { get; set; }
         public int usuario_Registrador { get; set; }
 
-        Ubiacacion(int id_Ubicacion, string pais, string estado, string ciudad, string codigo_Postal, DateTime fecha_Registro, int usuario_Registrador)
+        public Ubiacacion()
+        {
+        
+        }
+
+
+        public Ubiacacion(int id_Ubicacion, string pais, string estado, string ciudad, string codigo_Postal, DateTime fecha_Registro, int usuario_Registrador)
         {
             this.id_Ubicacion = id_Ubicacion;
             this.pais = pais;

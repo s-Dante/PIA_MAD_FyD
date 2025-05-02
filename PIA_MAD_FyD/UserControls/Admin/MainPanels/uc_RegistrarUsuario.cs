@@ -215,7 +215,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             //Nombre
             if (string.IsNullOrEmpty(nuevoUsuario.nombre))
             {
-                MessageBox.Show("El campo \"nombrebre\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("El campo \"nombre\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

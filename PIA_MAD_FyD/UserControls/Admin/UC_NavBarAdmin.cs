@@ -539,7 +539,7 @@ namespace PIA_MAD_FyD.UserControls.Admin
         //Submenu Modificar Hoteles
         private void button5_Click(object sender, EventArgs e)
         {
-            OnMenuSelected?.Invoke(this, "ModifciarHotel");
+            OnMenuSelected?.Invoke(this, "ModificarHotel");
         }
 
         //Menu Reportes

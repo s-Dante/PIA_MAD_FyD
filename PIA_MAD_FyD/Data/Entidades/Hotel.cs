@@ -21,8 +21,17 @@ namespace PIA_MAD_FyD.Data.Entidades
         public int usuario_Registrador { get; set; }
         public int usuario_Modifico { get; set; }
         public int ubicacion { get; set; }
+        public string rfc { get; set; }
+
+        //La ubicacion
+        public Ubiacacion ubicacionHotel { get; set; } //Ubicacion del hotel
 
         // Constructor
+
+        public Hotel()
+        {
+            // Constructor por defecto
+        }
         public Hotel(int id_Hotel, string nombre, string calle, string numero, string colonia, int num_Pisos, 
                     DateTime fecha_InicioOP, DateTime fecha_Registro, DateTime fecha_Modifico, int usuario_Registrador,
                     int usuario_Modifico, int ubicacion)
