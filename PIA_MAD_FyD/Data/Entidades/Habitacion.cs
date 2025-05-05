@@ -11,7 +11,7 @@ namespace PIA_MAD_FyD.Data.Entidades
         public int id_Habitacion { get; set; }
         public int num_Camas { get; set; }
         public char tipo_Cama { get; set; }
-        public float precio { get; set; }
+        public decimal precio { get; set; }
         public int capacidad { get; set; }
         public char nivel { get; set; }
         public char vista { get; set; }
@@ -22,7 +22,8 @@ namespace PIA_MAD_FyD.Data.Entidades
         public int id_Hotel { get; set; }
 
         // Constructor
-        public Habitacion(int id_Habitacion, int num_Camas, char tipo_Cama, float precio, int capacidad,
+        public Habitacion() { }
+        public Habitacion(int id_Habitacion, int num_Camas, char tipo_Cama, decimal precio, int capacidad,
                             char nivel, char vista, DateTime fecha_Registro, DateTime fecha_Modifico, 
                             int usuario_Registrador, int usuario_Modifico, int id_Hotel)
         {

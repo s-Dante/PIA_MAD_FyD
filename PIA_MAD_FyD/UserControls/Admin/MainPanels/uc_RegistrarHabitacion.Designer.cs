@@ -152,7 +152,7 @@
             this.numericUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.numericUpDown2.Location = new System.Drawing.Point(520, 410);
             this.numericUpDown2.Maximum = new decimal(new int[] {
-            12,
+            20,
             0,
             0,
             0});

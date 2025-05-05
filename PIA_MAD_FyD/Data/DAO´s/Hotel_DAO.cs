@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using PIA_MAD_FyD.Data.Entidades;
 using PIA_MAD_FyD.UserControls.Admin.MainPanels;
 
@@ -137,6 +139,156 @@ namespace PIA_MAD_FyD.Data.DAO_s
 
             return hoteles;
         }
+
+
+        //hoteles con habitaicon
+        public static List<Hotel> ObtenerHotelesConHabitaciones()
+        {
+            var hoteles = new Dictionary<int, Hotel>();
+
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand cmd = new SqlCommand("sp_ObtenerHotelesConHabitaciones", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int idHotel = reader.GetInt32(reader.GetOrdinal("id_Hotel"));
+
+                        if (!hoteles.ContainsKey(idHotel))
+                        {
+                            Hotel hotel = new Hotel
+                            {
+                                id_Hotel = idHotel,
+                                nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                                calle = reader.GetString(reader.GetOrdinal("calle")),
+                                numero = reader.GetString(reader.GetOrdinal("numero")),
+                                colonia = reader.GetString(reader.GetOrdinal("colonia")),
+                                num_Pisos = reader.GetInt32(reader.GetOrdinal("num_Pisos")),
+                                rfc = reader.IsDBNull(reader.GetOrdinal("rfc")) ? null : reader.GetString(reader.GetOrdinal("rfc")),
+                                ubicacionHotel = new Ubiacacion
+                                {
+                                    id_Ubicacion = reader.GetInt32(reader.GetOrdinal("id_Ubicacion")),
+                                    pais = reader.GetString(reader.GetOrdinal("pais")),
+                                    estado = reader.GetString(reader.GetOrdinal("estado")),
+                                    ciudad = reader.GetString(reader.GetOrdinal("ciudad")),
+                                    codigo_Postal = reader.GetString(reader.GetOrdinal("codigo_Postal"))
+                                },
+                                Habitaciones = new List<Habitacion>()
+                            };
+                            hoteles[idHotel] = hotel;
+                        }
+
+                        if (!reader.IsDBNull(reader.GetOrdinal("id_Habitacion")))
+                        {
+                            Habitacion hab = new Habitacion
+                            {
+                                id_Habitacion = reader.GetInt32(reader.GetOrdinal("id_Habitacion")),
+                                num_Camas = reader.GetInt32(reader.GetOrdinal("num_Camas")),
+                                tipo_Cama = reader.GetString(reader.GetOrdinal("tipo_Cama"))[0],
+                                precio = reader.GetDecimal(reader.GetOrdinal("precio")),
+                                capacidad = reader.GetInt32(reader.GetOrdinal("capacidad")),
+                                nivel = reader.GetString(reader.GetOrdinal("nivel"))[0],
+                                vista = reader.GetString(reader.GetOrdinal("vista"))[0],
+                                id_Hotel = idHotel
+                            };
+
+                            hoteles[idHotel].Habitaciones.Add(hab);
+                        }
+                    }
+                }
+            }
+
+            return hoteles.Values.ToList();
+        }
+
+
+        //Obtener las amenidades de cada habitacion
+        public static List<Amenidad> ObtenerAmenidadesPorHabitacion(int idHabitacion)
+        {
+            List<Amenidad> lista = new List<Amenidad>();
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand comando = new SqlCommand("sp_ObtenerAmenidadesPorHabitacion", conexion);
+                comando.CommandType = CommandType.StoredProcedure;
+                comando.Parameters.AddWithValue("@id_Habitacion", idHabitacion);
+
+                using (SqlDataReader reader = comando.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Amenidad a = new Amenidad();
+                        a.id_Amenidad = reader.GetInt32(0);
+                        a.amenidad = reader.GetString(1);
+                        lista.Add(a);
+                    }
+                }
+            }
+            return lista;
+        }
+
+        //Modificar habitaicon
+        public static bool ActualizarHabitacion(Habitacion h, Usuario usuarioLogeado)
+        {
+            using (var conexion = BD_Connection.ObtenerConexion())
+            {
+                try
+                {
+                    SqlCommand comando = new SqlCommand("sp_ActualizarHabitacion", conexion);
+                    comando.CommandType = CommandType.StoredProcedure;
+                    comando.Parameters.AddWithValue("@num_Camas", h.num_Camas);
+                    comando.Parameters.AddWithValue("@capacidad", h.capacidad);
+                    comando.Parameters.AddWithValue("@tipo_Cama", h.tipo_Cama);
+                    comando.Parameters.AddWithValue("@precio", h.precio);
+                    comando.Parameters.AddWithValue("@nivel", h.nivel);
+                    comando.Parameters.AddWithValue("@vista", h.vista);
+                    comando.Parameters.AddWithValue("@id_Habitacion", h.id_Habitacion);
+                    comando.Parameters.AddWithValue("@usuario_Modifico", usuarioLogeado.num_Nomina);
+
+                    int filasAfectadas = comando.ExecuteNonQuery();
+                    return filasAfectadas > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al actualizar la habitación: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+
+        public static void ActualizarAmenidadesDeHabitacion(int idHabitacion, List<Amenidad> nuevasAmenidades)
+        {
+            using (var conexion = BD_Connection.ObtenerConexion())
+            {
+                try
+                {
+                    // Eliminar amenidades actuales
+                    var deleteCmd = new SqlCommand("sp_ActualizarAmenidadesPorHabitacion", conexion);
+                    deleteCmd.CommandType = CommandType.StoredProcedure;
+                    deleteCmd.Parameters.AddWithValue("@id_Habitacion", idHabitacion);
+                    deleteCmd.ExecuteNonQuery();
+
+                    // Insertar nuevas
+                    foreach (var amenidad in nuevasAmenidades)
+                    {
+                        var insertCmd = new SqlCommand("sp_InsertarAmenidadHabitacion", conexion);
+                        insertCmd.CommandType = CommandType.StoredProcedure;
+                        insertCmd.Parameters.AddWithValue("@id_Habitacion", idHabitacion);
+                        insertCmd.Parameters.AddWithValue("@id_Amenidad", amenidad.id_Amenidad);
+                        insertCmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al actualizar amenidades: {ex.Message}");
+                }
+            }
+        }
+
+
 
     }
 }

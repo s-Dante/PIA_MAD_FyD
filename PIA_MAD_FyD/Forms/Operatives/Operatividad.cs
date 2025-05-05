@@ -56,7 +56,7 @@ namespace PIA_MAD_FyD.Forms.Operatives
             switch (opcion)
             {
                 case "RegistrarCliente":
-                    controlAMostrar = new uc_RegistrarCliente();
+                    controlAMostrar = new uc_RegistrarCliente(UsuarioLogeado);
                     break;
                 case "ModificarCliente":
                     controlAMostrar = new uc_ModificarCliente();

@@ -69,10 +69,10 @@ namespace PIA_MAD_FyD.Forms.Admin
                     controlAMostrar = new uc_ModificarHotel(UsuarioLogeado);
                     break;
                 case "RegistrarHabitacion":
-                    controlAMostrar = new uc_RegistrarHabitacion();
+                    controlAMostrar = new uc_RegistrarHabitacion(UsuarioLogeado);
                     break;
                 case "ModificarHabitacion":
-                    controlAMostrar = new uc_ModificarHabitacion();
+                    controlAMostrar = new uc_ModificarHabitacion(UsuarioLogeado);
                     break;
                 case "ReporteOcupacion":
                     controlAMostrar = new uc_ReporteOcupacion();

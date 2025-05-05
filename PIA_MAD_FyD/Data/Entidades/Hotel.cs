@@ -26,6 +26,10 @@ namespace PIA_MAD_FyD.Data.Entidades
         //La ubicacion
         public Ubiacacion ubicacionHotel { get; set; } //Ubicacion del hotel
 
+
+        // Habitacones por hotel
+        public List<Habitacion> Habitaciones { get; set; } = new List<Habitacion>();
+
         // Constructor
 
         public Hotel()

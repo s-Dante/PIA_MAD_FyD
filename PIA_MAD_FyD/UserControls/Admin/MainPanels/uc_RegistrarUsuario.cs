@@ -141,6 +141,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         //Telefono
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
+
             string input = textBox5.Text.Replace("-", ""); // Elimina los guiones
 
             if (input.Length > 10) // Limitar a 10 dígitos (sin guiones)

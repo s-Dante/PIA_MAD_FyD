@@ -19,6 +19,9 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         private Hotel seleccionado;
 
         List<Hotel> hoteles = Hotel_DAO.ObtenerHotelesConUbicacion();
+
+        Usuario usuarioLogeado;
+
         class HabitacionConfig
         {
             public int MaxCamas { get; set; }
@@ -32,11 +35,11 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             { "E", new HabitacionConfig { MaxCamas = 2, TiposCama = new List<string>{ "Individual", "Matrimonial" }, MaxCapacidadPorCama = 1 } },
             { "D", new HabitacionConfig { MaxCamas = 3, TiposCama = new List<string>{ "Matrimonial", "Queen Size" }, MaxCapacidadPorCama = 2 } },
             { "S", new HabitacionConfig { MaxCamas = 3, TiposCama = new List<string>{ "Queen Size", "King Size" }, MaxCapacidadPorCama = 2 } },
-            { "P", new HabitacionConfig { MaxCamas = 5, TiposCama = new List<string>{ "Queen Size","King Size" }, MaxCapacidadPorCama = 3 } }
+            { "P", new HabitacionConfig { MaxCamas = 5, TiposCama = new List<string>{ "King Size" }, MaxCapacidadPorCama = 3 } }
         };
 
 
-        public uc_RegistrarHabitacion()
+        public uc_RegistrarHabitacion(Usuario usuarioLogeado)
         {
             InitializeComponent();
             disableControlls();
@@ -57,7 +60,18 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
 
             comboBox2.Items.AddRange(new string[] { "Estandar", "Doble", "Suite", "Presidencial" });
             comboBox3.Items.AddRange(new string[] { "Al mar", "A la Alberca", "A la Ciudad", "Al Jardin", "Otros" }); //-- M = Ve al Mar, A = Vista a la Alberca, C = Vista a la Ciudad, J = Vista al Jardin, O = Otro
-                                                                                                                      //↑ agregar J y O a la DB
+
+            this.usuarioLogeado = usuarioLogeado;
+
+            // Agregar las amenidades al CheckedListBox
+            checkedListBox1.Items.Clear();
+            List<Amenidad> listaAmenidades = Amenidad_DAO.ObtenerAmenidades();
+            foreach (Amenidad a in listaAmenidades)
+            {
+                checkedListBox1.Items.Add(a); 
+            }
+
+
         }
 
         private void uc_RegistrarHabitacion_Load(object sender, EventArgs e)
@@ -178,7 +192,77 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         //Registrar Habitacion
         private void button2_Click(object sender, EventArgs e)
         {
+            seleccionado = (Hotel)listView1.SelectedItems[0].Tag;
+            if (seleccionado == null)
+            {
+                MessageBox.Show("Selecciona un hotel primero.");
+                return;
+            }
 
+            char nivel;
+            switch (comboBox2.SelectedItem.ToString())
+            {
+                case "Estandar": nivel = 'E'; break;
+                case "Doble": nivel = 'D'; break;
+                case "Suite": nivel = 'S'; break;
+                case "Presidencial": nivel = 'P'; break;
+                default: nivel = 'O'; break;
+            }
+
+            char vista;
+            switch (comboBox3.SelectedItem.ToString())
+            {
+                case "Al mar": vista = 'M'; break;
+                case "A la Alberca": vista = 'A'; break;
+                case "A la Ciudad": vista = 'C'; break;
+                case "Al Jardin": vista = 'J'; break;
+                default: vista = 'O'; break;
+            }
+
+            char tipoCama;
+            switch (comboBox1.SelectedItem.ToString())
+            {
+                case "Individual": tipoCama = 'I'; break;
+                case "Matrimonial": tipoCama = 'M'; break;
+                case "Queen Size": tipoCama = 'Q'; break;
+                default: tipoCama = 'K'; break;
+            }
+
+            Habitacion nuevaHabitacion = new Habitacion();
+
+            nuevaHabitacion.num_Camas = (int)numericUpDown1.Value;
+            nuevaHabitacion.tipo_Cama = tipoCama;
+            nuevaHabitacion.precio = (decimal)numericUpDown3.Value;
+            nuevaHabitacion.capacidad = (int)numericUpDown2.Value;
+            nuevaHabitacion.nivel = nivel;
+            nuevaHabitacion.vista = vista;
+            nuevaHabitacion.usuario_Registrador = usuarioLogeado.num_Nomina;
+            nuevaHabitacion.usuario_Modifico = usuarioLogeado.num_Nomina;
+            nuevaHabitacion.id_Hotel = seleccionado.id_Hotel;
+
+            List<int> amenidades = new List<int>();
+
+            foreach (object item in checkedListBox1.CheckedItems)
+            {
+                Amenidad a = (Amenidad)item;
+                amenidades.Add(a.id_Amenidad);
+            }
+
+
+            bool exito = Habitacion_DAO.InsertarHabitacion(nuevaHabitacion, amenidades);
+            if (exito)
+                MessageBox.Show("Habitación registrada exitosamente.");
+            else
+                MessageBox.Show("Ocurrió un error al registrar la habitación.");
+
+            disableControlls();
+            comboBox1.SelectedIndex = -1;
+            comboBox2.SelectedIndex = -1;
+            comboBox3.SelectedIndex = -1;
+            numericUpDown1.Value = 1;
+            numericUpDown2.Value = 1;
+            numericUpDown3.Value = 0;
+            checkedListBox1.ClearSelected();
         }
 
         private void label2_Click(object sender, EventArgs e)
