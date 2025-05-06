@@ -244,56 +244,65 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         //Guardar Cambios
         private void button1_Click(object sender, EventArgs e)
         {
-            if (habitacionSeleccionada == null) return;
-
-            // 1. Obtener nuevos valores
-            habitacionSeleccionada.num_Camas = (int)numericUpDown1.Value;
-            habitacionSeleccionada.capacidad = (int)numericUpDown2.Value;
-            habitacionSeleccionada.precio = (decimal)numericUpDown3.Value;
-
-            // Tipo de cama
-            string tipoCamaTexto = comboBox1.SelectedItem.ToString();
-            switch (tipoCamaTexto)
+            DialogResult guardar = MessageBox.Show("¿Seguro desea realizar los cambios?", "Alerta", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (guardar == DialogResult.Yes)
             {
-                case "Individual": habitacionSeleccionada.tipo_Cama = 'I'; break;
-                case "Matrimonial": habitacionSeleccionada.tipo_Cama = 'M'; break;
-                case "Queen Size": habitacionSeleccionada.tipo_Cama = 'Q'; break;
-                case "King Size": habitacionSeleccionada.tipo_Cama = 'K'; break;
+
+                if (habitacionSeleccionada == null) return;
+
+                // 1. Obtener nuevos valores
+                habitacionSeleccionada.num_Camas = (int)numericUpDown1.Value;
+                habitacionSeleccionada.capacidad = (int)numericUpDown2.Value;
+                habitacionSeleccionada.precio = (decimal)numericUpDown3.Value;
+
+                // Tipo de cama
+                string tipoCamaTexto = comboBox1.SelectedItem.ToString();
+                switch (tipoCamaTexto)
+                {
+                    case "Individual": habitacionSeleccionada.tipo_Cama = 'I'; break;
+                    case "Matrimonial": habitacionSeleccionada.tipo_Cama = 'M'; break;
+                    case "Queen Size": habitacionSeleccionada.tipo_Cama = 'Q'; break;
+                    case "King Size": habitacionSeleccionada.tipo_Cama = 'K'; break;
+                }
+
+                // Nivel
+                string nivelTexto = comboBox2.SelectedItem.ToString();
+                habitacionSeleccionada.nivel = nivelTexto[0];
+
+                // Vista
+                string vistaTexto = comboBox3.SelectedItem.ToString();
+                switch (vistaTexto)
+                {
+                    case "Al mar": habitacionSeleccionada.vista = 'M'; break;
+                    case "A la Alberca": habitacionSeleccionada.vista = 'A'; break;
+                    case "A la Ciudad": habitacionSeleccionada.vista = 'C'; break;
+                    case "Al Jardin": habitacionSeleccionada.vista = 'J'; break;
+                    case "Otros": habitacionSeleccionada.vista = 'O'; break;
+                }
+
+                // 2. Actualizar habitación en base de datos
+                bool actualizado = Hotel_DAO.ActualizarHabitacion(habitacionSeleccionada, usuarioLogeado);
+
+                // ✅ Recopilar amenidades seleccionadas
+                List<Amenidad> nuevasAmenidades = new List<Amenidad>();
+                foreach (var item in checkedListBox1.CheckedItems)
+                {
+                    nuevasAmenidades.Add((Amenidad)item);
+                }
+
+                // ✅ Actualizar amenidades
+                Hotel_DAO.ActualizarAmenidadesDeHabitacion(habitacionSeleccionada.id_Habitacion, nuevasAmenidades);
+
+                MessageBox.Show("Habitación actualizada correctamente.");
+
+
+                disableControlls();
+                CargarHotelesYHabitaciones();
             }
-
-            // Nivel
-            string nivelTexto = comboBox2.SelectedItem.ToString();
-            habitacionSeleccionada.nivel = nivelTexto[0];
-
-            // Vista
-            string vistaTexto = comboBox3.SelectedItem.ToString();
-            switch (vistaTexto)
+            else
             {
-                case "Al mar": habitacionSeleccionada.vista = 'M'; break;
-                case "A la Alberca": habitacionSeleccionada.vista = 'A'; break;
-                case "A la Ciudad": habitacionSeleccionada.vista = 'C'; break;
-                case "Al Jardin": habitacionSeleccionada.vista = 'J'; break;
-                case "Otros": habitacionSeleccionada.vista = 'O'; break;
+                MessageBox.Show("No se realizaron cambios.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            // 2. Actualizar habitación en base de datos
-            bool actualizado = Hotel_DAO.ActualizarHabitacion(habitacionSeleccionada, usuarioLogeado);
-
-            // ✅ Recopilar amenidades seleccionadas
-            List<Amenidad> nuevasAmenidades = new List<Amenidad>();
-            foreach (var item in checkedListBox1.CheckedItems)
-            {
-                nuevasAmenidades.Add((Amenidad)item);
-            }
-
-            // ✅ Actualizar amenidades
-            Hotel_DAO.ActualizarAmenidadesDeHabitacion(habitacionSeleccionada.id_Habitacion, nuevasAmenidades);
-
-            MessageBox.Show("Habitación actualizada correctamente.");
-
-
-            disableControlls();
-            CargarHotelesYHabitaciones();
         }
     }
 }

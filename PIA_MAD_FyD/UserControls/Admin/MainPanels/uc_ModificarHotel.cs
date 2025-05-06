@@ -50,6 +50,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             LoadCountryData();
 
             disableControls();
+            textBox6.KeyPress += textBox6_KeyPress;
         }
 
         private void disableControls()
@@ -309,7 +310,25 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         //Codigo Postal
         private void textBox6_TextChanged(object sender, EventArgs e)
         {
+            // Quitar y volver a agregar el evento para evitar loops
+            textBox6.TextChanged -= textBox6_TextChanged;
 
+            if (textBox6.Text.Length > 10)
+            {
+                textBox6.Text = textBox6.Text.Substring(0, 10);
+                textBox6.SelectionStart = textBox6.Text.Length; // Mantener cursor al final
+            }
+
+            textBox6.TextChanged += textBox6_TextChanged;
+        }
+
+        private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo dígitos y teclas de control (como backspace)
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Cancela la entrada del carácter
+            }
         }
 
         //Colonia

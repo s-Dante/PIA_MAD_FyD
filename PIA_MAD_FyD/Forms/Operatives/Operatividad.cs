@@ -59,10 +59,10 @@ namespace PIA_MAD_FyD.Forms.Operatives
                     controlAMostrar = new uc_RegistrarCliente(UsuarioLogeado);
                     break;
                 case "ModificarCliente":
-                    controlAMostrar = new uc_ModificarCliente();
+                    controlAMostrar = new uc_ModificarCliente(UsuarioLogeado);
                     break;
                 case "Reservaciones":
-                    controlAMostrar = new uc_Reservaciones();
+                    controlAMostrar = new uc_Reservaciones(UsuarioLogeado);
                     break;
                 case "CheckIn":
                     controlAMostrar = new uc_CheckIn();

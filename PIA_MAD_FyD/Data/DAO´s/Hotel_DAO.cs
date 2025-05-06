@@ -289,6 +289,81 @@ namespace PIA_MAD_FyD.Data.DAO_s
         }
 
 
+        public static List<Hotel> ObtenerHotelesYHabitacionesPorUbicacion(string pais, string estado, string ciudad)
+        {
+            List<Hotel> hoteles = new List<Hotel>();
+
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                try
+                {
+                    var comando = new SqlCommand("sp_ObtenerHotelesPorUbicacion", conexion);
+                    comando.CommandType = CommandType.StoredProcedure;
+                    comando.Parameters.AddWithValue("@pais", pais);
+                    comando.Parameters.AddWithValue("@estado", estado);
+                    comando.Parameters.AddWithValue("@ciudad", ciudad);
+
+                    using (SqlDataReader reader = comando.ExecuteReader())
+                    {
+                        Dictionary<int, Hotel> hotelDict = new Dictionary<int, Hotel>();
+
+                        while (reader.Read())
+                        {
+                            int idHotel = reader.GetInt32(reader.GetOrdinal("id_Hotel"));
+
+                            if (!hotelDict.ContainsKey(idHotel))
+                            {
+                                Hotel hotel = new Hotel
+                                {
+                                    id_Hotel = idHotel,
+                                    nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                                    calle = reader.GetString(reader.GetOrdinal("calle")),
+                                    numero = reader.GetString(reader.GetOrdinal("numero")),
+                                    colonia = reader.GetString(reader.GetOrdinal("colonia")),
+                                    num_Pisos = reader.GetInt32(reader.GetOrdinal("num_Pisos")),
+                                    ubicacionHotel = new Ubiacacion
+                                    {
+                                        pais = reader.GetString(reader.GetOrdinal("pais")),
+                                        estado = reader.GetString(reader.GetOrdinal("estado")),
+                                        ciudad = reader.GetString(reader.GetOrdinal("ciudad")),
+                                        codigo_Postal = reader.GetString(reader.GetOrdinal("codigo_Postal"))
+                                    },
+                                    Habitaciones = new List<Habitacion>()
+                                };
+
+                                hotelDict.Add(idHotel, hotel);
+                            }
+
+                            if (!reader.IsDBNull(reader.GetOrdinal("id_Habitacion")))
+                            {
+                                Habitacion hab = new Habitacion
+                                {
+                                    id_Habitacion = reader.GetInt32(reader.GetOrdinal("id_Habitacion")),
+                                    num_Camas = reader.GetInt32(reader.GetOrdinal("num_Camas")),
+                                    capacidad = reader.GetInt32(reader.GetOrdinal("capacidad")),
+                                    precio = reader.GetDecimal(reader.GetOrdinal("precio")),
+                                    tipo_Cama = reader.GetString(reader.GetOrdinal("tipo_Cama"))[0],
+                                    nivel = reader.GetString(reader.GetOrdinal("nivel"))[0],
+                                    vista = reader.GetString(reader.GetOrdinal("vista"))[0]
+                                };
+
+                                hotelDict[idHotel].Habitaciones.Add(hab);
+                            }
+                        }
+
+                        hoteles = hotelDict.Values.ToList();
+                    }
+
+                    return hoteles;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener los hoteles por ubicación.\n{ex.Message}");
+                    return new List<Hotel>(); // Mejor que null
+                }
+            }
+        }
+
 
     }
 }
