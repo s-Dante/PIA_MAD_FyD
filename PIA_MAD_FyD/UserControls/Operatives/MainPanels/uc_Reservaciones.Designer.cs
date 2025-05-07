@@ -65,6 +65,7 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
+            this.listView1 = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -172,6 +173,7 @@
             // 
             // treeView1
             // 
+            this.treeView1.CheckBoxes = true;
             this.treeView1.Location = new System.Drawing.Point(315, 122);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(328, 221);
@@ -427,10 +429,21 @@
             this.label25.TabIndex = 149;
             this.label25.Text = "Tipo de Cama:";
             // 
+            // listView1
+            // 
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(659, 122);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(447, 221);
+            this.listView1.TabIndex = 151;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
             // uc_Reservaciones
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.RosyBrown;
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.label24);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.numericUpDown1);
@@ -517,5 +530,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.ListView listView1;
     }
 }

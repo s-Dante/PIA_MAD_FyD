@@ -22,6 +22,9 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
 
         List<Hotel> hoteles;
 
+        private List<Habitacion> habitacionesSeleccionadas = new List<Habitacion>();
+        private Hotel hotelSeleccionado = null;
+
         private List<Country> countries;
         private Country selectedCountry;
         private State selectedState;
@@ -38,6 +41,149 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
             this.usuarioLogeado = usuarioLogeado;
 
             treeView1.AfterSelect += treeView1_AfterSelect;
+            treeView1.CheckBoxes = true; // Habilitar las casillas de verificación
+            treeView1.AfterCheck += treeView1_AfterCheck;
+
+            InitializeListView();
+            listView1.FullRowSelect = true; // Selección de fila completa
+        }
+
+        private bool isProcessingCheck = false;
+
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (isProcessingCheck) return;
+
+            isProcessingCheck = true;
+
+            try
+            {
+                if (e.Node.Tag is Hotel)
+                {
+                    MessageBox.Show("No puedes seleccionar el hotel, solo habitaciones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    e.Node.Checked = false;
+                    return;
+                }
+
+                if (e.Node.Tag is Habitacion habitacion)
+                {
+                    Hotel hotelPadre = e.Node.Parent?.Tag as Hotel;
+
+                    if (hotelSeleccionado == null)
+                    {
+                        hotelSeleccionado = hotelPadre;
+                    }
+
+                    if (hotelPadre != hotelSeleccionado)
+                    {
+                        MessageBox.Show("Solo puedes seleccionar habitaciones del mismo hotel.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        e.Node.Checked = false;
+                        return;
+                    }
+
+                    if (e.Node.Checked)
+                    {
+                        habitacionesSeleccionadas.Add(habitacion);
+                    }
+                    else
+                    {
+                        habitacionesSeleccionadas.Remove(habitacion);
+
+                        if (habitacionesSeleccionadas.Count == 0)
+                        {
+                            hotelSeleccionado = null;
+                        }
+                    }
+
+                    MostrarHabitacionesSeleccionadas();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                isProcessingCheck = false;
+            }
+        }
+
+        private void MostrarHabitacionesSeleccionadas()
+        {
+            listView1.Items.Clear();
+
+            foreach (var habitacion in habitacionesSeleccionadas)
+            {
+                string tipoCama = GetTipoCama(habitacion.tipo_Cama);
+                string nivel = GetNivel(habitacion.nivel);
+                string vista = GetVista(habitacion.vista);
+
+                ListViewItem item = new ListViewItem(habitacion.id_Habitacion.ToString());
+                item.SubItems.Add(tipoCama);
+                item.SubItems.Add(habitacion.num_Camas.ToString());
+                item.SubItems.Add(habitacion.capacidad.ToString());
+                item.SubItems.Add(habitacion.precio.ToString("C"));
+                item.SubItems.Add(nivel);
+                item.SubItems.Add(vista);
+
+                listView1.Items.Add(item);
+            }
+        }
+
+        private string GetTipoCama(char tipoCama)
+        {
+            switch (tipoCama)
+            {
+                case 'I': return "Individual";
+                case 'M': return "Matrimonial";
+                case 'Q': return "Queen Size";
+                case 'K': return "King Size";
+                default: return "Desconocido";
+            }
+        }
+
+        private string GetNivel(char nivel)
+        {
+            switch (nivel)
+            {
+                case 'E': return "Estandar";
+                case 'D': return "Doble";
+                case 'S': return "Suite";
+                case 'P': return "Presidencial";
+                default: return "Desconocido";
+            }
+        }
+
+        private string GetVista(char vista)
+        {
+            switch (vista)
+            {
+                case 'M': return "Al Mar";
+                case 'A': return "A la Alberca";
+                case 'C': return "A la Ciudad";
+                case 'J': return "Al Jardin";
+                case 'O': return "Otros";
+                default: return "Desconocido";
+            }
+        }
+
+        private void InitializeListView()
+        {
+            // Configurar las columnas del ListView
+            listView1.View = View.Details;
+            listView1.Columns.Add("ID Habitacion", 100);
+            listView1.Columns.Add("Tipo de Cama", 100);
+            listView1.Columns.Add("Numero de Camas", 100);
+            listView1.Columns.Add("Capacidad", 100);
+            listView1.Columns.Add("Precio", 100);
+            listView1.Columns.Add("Nivel", 100);
+            listView1.Columns.Add("Vista", 100);
+        }
+
+        //ListView
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void InitializeComboBoxes()
@@ -335,6 +481,7 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                 // Limpiar controles de habitación
                 LimpiarControlesHabitacion();
             }
+            enableControllsReservacion();
         }
 
         private void LimpiarControlesHabitacion()
@@ -348,7 +495,23 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
             label21.Text = "";
         }
 
+        private void enableControllsReservacion()
+        {
+            dateTimePicker1.Enabled = true;
+            dateTimePicker2.Enabled = true;
+            numericUpDown1.Enabled = true;
+            numericUpDown2.Enabled = true;
+            button1.Enabled = true;
+        }
 
+        private void disableControllsReservacion()
+        {
+            dateTimePicker1.Enabled = false;
+            dateTimePicker2.Enabled = false;
+            numericUpDown1.Enabled = false;
+            numericUpDown2.Enabled = false;
+            button1.Enabled = false;
+        }
         //FECHA DE ENTRADA
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
@@ -376,6 +539,60 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
         //RESERVAR
         private void button1_Click(object sender, EventArgs e)
         {
+            // Validación de fechas
+            DateTime fechaInicio = dateTimePicker1.Value;
+            DateTime fechaFin = dateTimePicker2.Value;
+
+            if (fechaInicio < DateTime.Now)
+            {
+                MessageBox.Show("La fecha de inicio no puede ser una fecha pasada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (fechaFin < fechaInicio)
+            {
+                MessageBox.Show("La fecha final no puede ser anterior a la fecha inicial.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Validación de cantidad de huéspedes
+            int cantidadHuespedes = (int)numericUpDown2.Value;
+            int capacidadTotal = habitacionesSeleccionadas.Sum(h => h.capacidad);
+
+            if (cantidadHuespedes > capacidadTotal)
+            {
+                MessageBox.Show($"La cantidad de huéspedes no puede ser mayor a la capacidad total de las habitaciones seleccionadas ({capacidadTotal} huéspedes).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Validación de anticipo
+            decimal anticipo = numericUpDown1.Value;
+            decimal precioTotal = habitacionesSeleccionadas.Sum(h => h.precio * (decimal)(fechaFin - fechaInicio).TotalDays);
+
+            if (anticipo > precioTotal)
+            {
+                MessageBox.Show($"El anticipo no puede ser mayor al precio total de la reserva ({precioTotal:C}).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Llamada al DAO para realizar la reserva
+            try
+            {
+                bool reservaExitosa = Reservacion_DAO.RealizarReserva(clienteReservador.rfc, hotelSeleccionado.id_Hotel, fechaInicio, fechaFin, cantidadHuespedes, anticipo, habitacionesSeleccionadas, usuarioLogeado.num_Nomina);
+
+                if (reservaExitosa)
+                {
+                    MessageBox.Show("La reserva se ha realizado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se pudo realizar la reserva. Por favor, verifica los datos y vuelve a intentarlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
 
