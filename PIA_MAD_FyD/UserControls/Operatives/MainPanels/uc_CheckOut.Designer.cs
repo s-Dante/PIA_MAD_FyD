@@ -45,6 +45,7 @@
             this.button2.TabIndex = 49;
             this.button2.Text = "Check Out";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox2
             // 
@@ -53,6 +54,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(699, 30);
             this.textBox2.TabIndex = 48;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label4
             // 
@@ -88,6 +90,7 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(361, 254);
             this.checkedListBox1.TabIndex = 50;
+            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // uc_CheckOut
             // 
@@ -100,6 +103,7 @@
             this.Controls.Add(this.label4);
             this.Name = "uc_CheckOut";
             this.Size = new System.Drawing.Size(1149, 722);
+            this.Load += new System.EventHandler(this.uc_CheckOut_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

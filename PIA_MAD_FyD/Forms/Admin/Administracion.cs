@@ -84,7 +84,7 @@ namespace PIA_MAD_FyD.Forms.Admin
                     controlAMostrar = new uc_HistorialCliente();
                     break;
                 case "Cancelaciones":
-                    controlAMostrar = new uc_Cancelaciones();
+                    controlAMostrar = new uc_Cancelaciones(UsuarioLogeado);
                     break;
             }
             if (controlAMostrar != null)

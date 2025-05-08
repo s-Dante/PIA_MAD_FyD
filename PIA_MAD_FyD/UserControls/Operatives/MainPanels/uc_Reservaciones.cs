@@ -575,18 +575,41 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                 return;
             }
 
+            // Hacemos que se cancelen las reservaciones sin checkIn
+            try
+            {
+                // Cancelar las reservaciones sin check-in
+                Reservacion_DAO.CancelarReservacionesSinCheckIn();
+
+                MessageBox.Show("Reservaciones sin check-in canceladas exitosamente.", "Proceso Completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cancelar reservaciones sin check-in: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
             // Llamada al DAO para realizar la reserva
             try
             {
-                bool reservaExitosa = Reservacion_DAO.RealizarReserva(clienteReservador.rfc, hotelSeleccionado.id_Hotel, fechaInicio, fechaFin, cantidadHuespedes, anticipo, habitacionesSeleccionadas, usuarioLogeado.num_Nomina);
+                var reservaInfo = Reservacion_DAO.RealizarReserva(clienteReservador.rfc, hotelSeleccionado.id_Hotel, fechaInicio, fechaFin, cantidadHuespedes, anticipo, habitacionesSeleccionadas, usuarioLogeado.num_Nomina);
 
-                if (reservaExitosa)
+                if (reservaInfo != null)
                 {
-                    MessageBox.Show("La reserva se ha realizado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string mensaje = $"La reserva se ha realizado con éxito.\n\n" +
+                                     $"Código: {reservaInfo["id_Reservacion"]}\n" +
+                                     $"Fecha Inicio: {reservaInfo["fecha_Ini"]}\n" +
+                                     $"Fecha Fin: {reservaInfo["fecha_Fin"]}\n" +
+                                     $"Habitaciones: {reservaInfo["cant_Habitaciones"]}\n" +
+                                     $"Tipos: {reservaInfo["tipos_Habitaciones"]}\n" +
+                                     $"Huéspedes: {reservaInfo["cant_Huespedes"]}\n" +
+                                     $"Anticipo: {reservaInfo["anticipo_Pagado"]}";
+
+                    MessageBox.Show(mensaje, "Reserva Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo realizar la reserva. Por favor, verifica los datos y vuelve a intentarlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No se pudo realizar la reserva. Por favor, verifica los datos e intenta nuevamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)

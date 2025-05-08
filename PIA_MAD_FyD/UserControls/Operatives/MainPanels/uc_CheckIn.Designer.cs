@@ -43,6 +43,7 @@
             this.button2.TabIndex = 49;
             this.button2.Text = "Check In";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox2
             // 
@@ -51,6 +52,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(699, 30);
             this.textBox2.TabIndex = 48;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label4
             // 

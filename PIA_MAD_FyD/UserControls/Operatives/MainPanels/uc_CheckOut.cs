@@ -16,5 +16,28 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
         {
             InitializeComponent();
         }
+
+        private void uc_CheckOut_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        //Codigo de Reservacion
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Lista de chequeo de servicios extra
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Boton de checkout
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
