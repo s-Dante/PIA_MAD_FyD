@@ -73,7 +73,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             textBox7.Enabled = true;
             textBox8.Enabled = true;
             textBox2.Enabled = true;
-            textBox4.Enabled = true;
+            textBox4.Enabled = false;
             textBox5.Enabled = true;
             dateTimePicker1.Enabled = true;
             radioButton1.Enabled = true;

@@ -63,7 +63,7 @@
             this.textBox5.Location = new System.Drawing.Point(790, 100);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(316, 30);
-            this.textBox5.TabIndex = 60;
+            this.textBox5.TabIndex = 51;
             this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
             // label8
@@ -82,7 +82,7 @@
             this.textBox4.Location = new System.Drawing.Point(790, 363);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(316, 30);
-            this.textBox4.TabIndex = 58;
+            this.textBox4.TabIndex = 54;
             this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
             // label7
@@ -101,7 +101,7 @@
             this.textBox3.Location = new System.Drawing.Point(790, 279);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(316, 30);
-            this.textBox3.TabIndex = 56;
+            this.textBox3.TabIndex = 53;
             this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // label6
@@ -120,7 +120,7 @@
             this.textBox2.Location = new System.Drawing.Point(790, 185);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(316, 30);
-            this.textBox2.TabIndex = 54;
+            this.textBox2.TabIndex = 52;
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label5
@@ -140,7 +140,7 @@
             this.comboBox3.Location = new System.Drawing.Point(427, 360);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(316, 33);
-            this.comboBox3.TabIndex = 52;
+            this.comboBox3.TabIndex = 49;
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // comboBox2
@@ -150,7 +150,7 @@
             this.comboBox2.Location = new System.Drawing.Point(427, 276);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(316, 33);
-            this.comboBox2.TabIndex = 51;
+            this.comboBox2.TabIndex = 48;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // comboBox1
@@ -160,7 +160,7 @@
             this.comboBox1.Location = new System.Drawing.Point(427, 182);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(316, 33);
-            this.comboBox1.TabIndex = 50;
+            this.comboBox1.TabIndex = 47;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label4
@@ -220,7 +220,7 @@
             this.button1.Location = new System.Drawing.Point(1000, 547);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(106, 55);
-            this.button1.TabIndex = 67;
+            this.button1.TabIndex = 57;
             this.button1.Text = "Guardar Cambios";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -232,7 +232,7 @@
             this.button2.Location = new System.Drawing.Point(888, 547);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(106, 55);
-            this.button2.TabIndex = 66;
+            this.button2.TabIndex = 56;
             this.button2.Text = "Modificar";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -253,7 +253,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(139, 30);
-            this.numericUpDown1.TabIndex = 71;
+            this.numericUpDown1.TabIndex = 55;
             this.numericUpDown1.Value = new decimal(new int[] {
             1,
             0,
@@ -278,7 +278,7 @@
             this.textBox6.Location = new System.Drawing.Point(568, 425);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(141, 30);
-            this.textBox6.TabIndex = 73;
+            this.textBox6.TabIndex = 50;
             this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // label10

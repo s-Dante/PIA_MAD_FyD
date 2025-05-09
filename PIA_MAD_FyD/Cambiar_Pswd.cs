@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,8 @@ namespace PIA_MAD_FyD
         private string clave = "12345678"; // Clave para realizar el cambio de contraseña
         private bool isValid = false;
 
+        private bool isResetting = false;
+
         public Cambiar_Pswd()
         {
             InitializeComponent();
@@ -44,6 +47,8 @@ namespace PIA_MAD_FyD
         //Nueva Contraseña
         private async void textBox2_TextChanged(object sender, EventArgs e)
         {
+            if (isResetting) return;
+
             if (pswdCheck == null || pswdCheck.IsDisposed) // Crear el popup si no existe
             {
                 pswdCheck = new PasswordCheck();
@@ -66,14 +71,21 @@ namespace PIA_MAD_FyD
             bool digit = password.Any(char.IsDigit);
             bool specialChar = password.Any(ch => !char.IsLetterOrDigit(ch));
 
-            pswdCheck.UpdateValidation(length, uppercase, lowercase, digit, specialChar);
+            if (pswdCheck != null && !pswdCheck.IsDisposed)
+            {
+                pswdCheck.UpdateValidation(length, uppercase, lowercase, digit, specialChar);
+            }
+
 
             // Ocultar el popup si la contraseña ya es válida
             if (length && uppercase && lowercase && digit && specialChar)
             {
                 await Task.Delay(800);
-                pswdCheck.Close();
-                pswdCheck = null; // Liberar referencia
+                if (pswdCheck != null && !pswdCheck.IsDisposed)
+                {
+                    pswdCheck.Close();
+                    pswdCheck = null;
+                }
             }
         }
 
@@ -134,11 +146,22 @@ namespace PIA_MAD_FyD
                 Usuario_DAO.CambiarContraseña(correo, nuevaContrasena);
 
                 MessageBox.Show("Contraseña actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                textBox1.Text = "";
+                textBox2.Text = "";
+                textBox3.Text = "";
+                textBox4.Text = "";
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error al cambiar la contraseña: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cambiar la contraseña: " + ex.Message);
+                MessageBox.Show("Error inesperado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+
+            isResetting = true; // Evitar que el popup se muestre al cambiar la contraseña
         }
 
     }

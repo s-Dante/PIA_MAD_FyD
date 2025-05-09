@@ -270,7 +270,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
                 try
                 {
                     Usuario_DAO.ActualizarUsuario(usuario);
-                    MessageBox.Show("Cambios realizados exitosamente :)", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("Cambios realizados exitosamente :)", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
                 catch (Exception ex)
@@ -281,7 +281,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             else
             {
                 // Si el usuario selecciona "No", no se realizan cambios
-                MessageBox.Show("No se realizaron cambios.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se realizaron cambios.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             // Deshabilitar los campos nuevamente
             textBox1.Enabled = false;

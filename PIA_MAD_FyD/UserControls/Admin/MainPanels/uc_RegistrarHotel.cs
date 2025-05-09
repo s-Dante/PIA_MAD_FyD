@@ -231,9 +231,19 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             nuevoHotel.usuario_Modifico = usuarioLogeado.num_Nomina;
 
             Ubiacacion nuevaUbicacion = new Ubiacacion();
-            nuevaUbicacion.pais = selectedCountry.name;
-            nuevaUbicacion.estado = selectedState.name;
-            string ciudadSeleccionada = comboBox3.Text.Trim();
+            string paisSeleccionado = comboBox1.SelectedItem?.ToString();
+            if (string.IsNullOrWhiteSpace(paisSeleccionado))
+            {
+                MessageBox.Show("Debes seleccionar o escribir un país.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+                string estadoSeleccionado = comboBox2.SelectedItem?.ToString();
+            if (string.IsNullOrWhiteSpace(estadoSeleccionado))
+            {
+                MessageBox.Show("Debes seleccionar o escribir un estado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string ciudadSeleccionada = comboBox3.SelectedItem?.ToString();
 
             if (string.IsNullOrWhiteSpace(ciudadSeleccionada))
             {
@@ -241,6 +251,8 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
                 return;
             }
 
+            nuevaUbicacion.pais = paisSeleccionado;
+            nuevaUbicacion.estado = estadoSeleccionado;
             nuevaUbicacion.ciudad = ciudadSeleccionada;
 
             nuevaUbicacion.codigo_Postal = textBox6.Text;

@@ -261,9 +261,29 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
             newCliente.fecha_Nacimiento = dateTimePicker1.Value;
 
             newCliente.ubicacion_Cliente = new Ubiacacion();
-            newCliente.ubicacion_Cliente.pais = comboBox1.SelectedItem.ToString();
-            newCliente.ubicacion_Cliente.estado = comboBox2.SelectedItem.ToString();
-            newCliente.ubicacion_Cliente.ciudad = comboBox3.SelectedItem.ToString();
+            string paisSeleccionado = comboBox1.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(paisSeleccionado))
+            {
+                MessageBox.Show("Selecciona un país válido.");
+                return;
+            }
+            newCliente.ubicacion_Cliente.pais = paisSeleccionado;
+
+            string estadoSeleccionado = comboBox2.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(estadoSeleccionado))
+            {
+                MessageBox.Show("Selecciona un estado válido.");
+                return;
+            }
+            newCliente.ubicacion_Cliente.estado = estadoSeleccionado;
+            string ciudadSeleccionada = comboBox3.Text;
+            if (string.IsNullOrEmpty(ciudadSeleccionada))
+            {
+                MessageBox.Show("Selecciona una ciudad válida.");
+                return;
+            }
+            newCliente.ubicacion_Cliente.ciudad = ciudadSeleccionada;
+
             newCliente.ubicacion_Cliente.codigo_Postal = textBox5.Text;
             newCliente.fecha_Registro = DateTime.Now;
             newCliente.usuario_Registrador = usuarioLogeado.num_Nomina;
@@ -271,7 +291,7 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
             newCliente.usuario_Modifico = usuarioLogeado.num_Nomina;
 
 
-            string estadoCivil = comboBox4.SelectedItem.ToString();
+            string estadoCivil = comboBox4.SelectedItem?.ToString();
             switch (estadoCivil)
             {
                 case "Casado":
@@ -417,12 +437,46 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                         MessageBox.Show("Error desconocido.");
                         break;
                 }
+
+                limpiarControles();
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
+
+        //Limpiar controles
+        private void limpiarControles()
+        {
+            textBox3.Clear();
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox4.Clear();
+            textBox5.Clear();
+            textBox7.Clear();
+            textBox8.Clear();
+            comboBox1.SelectedIndex = -1;
+            comboBox2.SelectedIndex = -1;
+            comboBox3.SelectedIndex = -1;
+            comboBox4.SelectedIndex = -1;
+            dateTimePicker1.Value = DateTime.Now;
+            emailCheck.Visible = false; // Ocultar el tooltip
+            comboBox1.Text = "Seleccionar país";
+            comboBox2.Text = "Seleccionar estado";
+            comboBox3.Text = "Seleccionar ciudad";
+            comboBox1.AutoCompleteCustomSource.Clear();
+            comboBox2.AutoCompleteCustomSource.Clear();
+            comboBox3.AutoCompleteCustomSource.Clear();
+            comboBox1.Items.Clear();
+            comboBox2.Items.Clear();
+            comboBox3.Items.Clear();
+            selectedCountry = null;
+            selectedState = null;
+        }
+
 
         //Codigo Postal
         private void textBox5_TextChanged(object sender, EventArgs e)

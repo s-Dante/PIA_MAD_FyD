@@ -141,21 +141,15 @@ namespace PIA_MAD_FyD.Data.DAO_s
         {
             using (SqlConnection conexion = BD_Connection.ObtenerConexion())
             {
-                try
-                {
-                    SqlCommand comando = new SqlCommand("sp_CambiarContrasena", conexion);
-                    comando.CommandType = CommandType.StoredProcedure;
-                    comando.Parameters.AddWithValue("@correo", correo);
-                    comando.Parameters.AddWithValue("@nuevaContrasena", nuevaContrasena); // texto plano
+                SqlCommand comando = new SqlCommand("sp_CambiarContrasena", conexion);
+                comando.CommandType = CommandType.StoredProcedure;
+                comando.Parameters.AddWithValue("@correo", correo);
+                comando.Parameters.AddWithValue("@nuevaContrasena", nuevaContrasena); // texto plano
 
-                    comando.ExecuteNonQuery();
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Error SQL: " + ex.Message);
-                }
+                comando.ExecuteNonQuery(); // Si ocurre un error, lanzará una excepción
             }
         }
+
 
         //Metodo para saber que usuario es el que se logeo
         public static Usuario ObtenerUsuarioLogeado(string correo)

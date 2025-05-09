@@ -75,7 +75,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             textBox2.Enabled = true;
             textBox3.Enabled = true;
             textBox4.Enabled = true;
-            textBox5.Enabled = true;
+            textBox5.Enabled = false;
             textBox6.Enabled = true;
             numericUpDown1.Enabled = true;
             comboBox1.Enabled = true;

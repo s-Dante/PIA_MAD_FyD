@@ -242,7 +242,7 @@ namespace PIA_MAD_FyD
             nuevoUsuario.fecha_Registro = DateTime.Now;
             nuevoUsuario.fecha_Modificaion = DateTime.Now;
             nuevoUsuario.estatus = 'A'; // 'A' para activo, 'B' para inactivo
-            nuevoUsuario.num_Nomina = int.Parse(textBox4.Text);
+            string numeroNomina = textBox4.Text;
             nuevoUsuario.usuario_Registrador = 1111;
             nuevoUsuario.usuario_Modifico = 1111;
 
@@ -253,7 +253,7 @@ namespace PIA_MAD_FyD
             //Nombre
             if (string.IsNullOrEmpty(nuevoUsuario.nombre))
             {
-                MessageBox.Show("El campo \"nombrebre\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("El campo \"nombre\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -304,10 +304,13 @@ namespace PIA_MAD_FyD
             }
 
             //Numero de Nomina
-            if (string.IsNullOrEmpty(nuevoUsuario.num_Nomina.ToString()))
+            if (string.IsNullOrEmpty(numeroNomina))
             {
                 MessageBox.Show("El campo \"numero de nomina\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }else
+            {
+                nuevoUsuario.num_Nomina = int.Parse(numeroNomina);
             }
 
             //Clave de acceso

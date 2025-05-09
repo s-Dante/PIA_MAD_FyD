@@ -207,7 +207,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             nuevoUsuario.fecha_Registro = DateTime.Now;
             nuevoUsuario.fecha_Modificaion = DateTime.Now;
             nuevoUsuario.estatus = 'A'; // 'A' para activo, 'B' para inactivo
-            nuevoUsuario.num_Nomina = int.Parse(textBox4.Text);
+            string numeroNomina = textBox4.Text.Trim();
             nuevoUsuario.usuario_Registrador = usuarioLogeado.num_Nomina;
             nuevoUsuario.usuario_Modifico = usuarioLogeado.num_Nomina;
             string pswd = textBox3.Text;
@@ -269,10 +269,13 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             }
 
             //Numero de Nomina
-            if (string.IsNullOrEmpty(nuevoUsuario.num_Nomina.ToString()))
+            if (string.IsNullOrEmpty(numeroNomina))
             {
                 MessageBox.Show("El campo \"numero de nomina\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            } else
+            {
+                nuevoUsuario.num_Nomina = int.Parse(numeroNomina);
             }
 
             //Tipo de Usuario
