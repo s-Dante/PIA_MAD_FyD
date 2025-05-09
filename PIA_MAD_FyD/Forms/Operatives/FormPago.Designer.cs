@@ -1,6 +1,6 @@
 ﻿namespace PIA_MAD_FyD.Forms.Operatives
 {
-    partial class Pago
+    partial class FormPago
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPago));
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.label10 = new System.Windows.Forms.Label();
@@ -35,6 +36,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // radioButton2
@@ -48,6 +50,7 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Efectivo";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -60,6 +63,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Tarjeta";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // label10
             // 
@@ -82,16 +86,18 @@
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "Cheque";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.button2.Location = new System.Drawing.Point(310, 314);
+            this.button2.Location = new System.Drawing.Point(242, 322);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(129, 55);
             this.button2.TabIndex = 67;
             this.button2.Text = "Pagar";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label1
             // 
@@ -112,13 +118,25 @@
             this.label2.Size = new System.Drawing.Size(56, 25);
             this.label2.TabIndex = 69;
             this.label2.Text = "Total";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
-            // Pago
+            // button1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.button1.Location = new System.Drawing.Point(394, 322);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(129, 55);
+            this.button1.TabIndex = 70;
+            this.button1.Text = "Cancelar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // FormPago
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.OldLace;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
@@ -126,8 +144,11 @@
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.label10);
-            this.Name = "Pago";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "FormPago";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pago";
+            this.Load += new System.EventHandler(this.Pago_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,5 +163,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
     }
 }

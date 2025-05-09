@@ -43,6 +43,36 @@ namespace PIA_MAD_FyD.Helpers.FormManager
             return form;
         }
 
+        public static Form ShowFormParams<T>(Form currentForm = null, bool cerrarAppAlCerrar = false, bool ocultarActual = false, params object[] args) where T : Form
+        {
+            Form form;
+
+            if (forms.ContainsKey(typeof(T)) && !forms[typeof(T)].IsDisposed)
+            {
+                form = forms[typeof(T)];
+                form.BringToFront();
+                form.WindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                form = (Form)Activator.CreateInstance(typeof(T), args);
+                form.FormClosed += (s, e) => forms.Remove(typeof(T));
+
+                if (cerrarAppAlCerrar)
+                    form.FormClosed += (s, e) => Application.Exit();
+
+                forms[typeof(T)] = form;
+            }
+
+            if (ocultarActual && currentForm != null)
+            {
+                currentForm.Hide();
+            }
+
+            form.Show();
+            return form;
+        }
+
 
 
         // ✅ Verificar si el formulario ya existe

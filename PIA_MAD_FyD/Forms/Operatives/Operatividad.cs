@@ -68,7 +68,7 @@ namespace PIA_MAD_FyD.Forms.Operatives
                     controlAMostrar = new uc_CheckIn(UsuarioLogeado);
                     break;
                 case "CheckOut":
-                    controlAMostrar = new uc_CheckOut();
+                    controlAMostrar = new uc_CheckOut(UsuarioLogeado);
                     break;
             }
             if (controlAMostrar != null)

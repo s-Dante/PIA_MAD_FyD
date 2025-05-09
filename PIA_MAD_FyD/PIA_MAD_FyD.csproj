@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.5.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.4, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.4\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -77,6 +83,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="zxing, Version=0.16.10.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.10\lib\net47\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.10.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.10\lib\net47\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cambiar_Pswd.cs">
@@ -150,11 +162,11 @@
     <Compile Include="Forms\Operatives\Operatividad.Designer.cs">
       <DependentUpon>Operatividad.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Operatives\Pago.cs">
+    <Compile Include="Forms\Operatives\FormPago.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Operatives\Pago.Designer.cs">
-      <DependentUpon>Pago.cs</DependentUpon>
+    <Compile Include="Forms\Operatives\FormPago.Designer.cs">
+      <DependentUpon>FormPago.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BorderRadius.cs">
       <SubType>Component</SubType>
@@ -320,8 +332,8 @@
     <EmbeddedResource Include="Forms\Operatives\Operatividad.resx">
       <DependentUpon>Operatividad.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Operatives\Pago.resx">
-      <DependentUpon>Pago.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Operatives\FormPago.resx">
+      <DependentUpon>FormPago.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -418,7 +430,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Fonts\" />
-    <Folder Include="Assets\Icons\" />
     <Folder Include="Forms\Shared\" />
     <Folder Include="Helpers\Validations\ValidateForPopUps\" />
   </ItemGroup>
@@ -431,6 +442,10 @@
     <None Include="Assets\Imgs\DaferCorpLogoANDText.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Icons\DaferCorp-Logo.ico" />
+    <Content Include="Assets\Icons\Image.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
