@@ -57,6 +57,7 @@
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(203, 33);
             this.comboBox3.TabIndex = 41;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -98,6 +99,7 @@
             this.button2.TabIndex = 45;
             this.button2.Text = "Buscar";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // listView1
             // 
@@ -122,6 +124,7 @@
             this.listView1.TabIndex = 46;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // columnHeader1
             // 
@@ -200,6 +203,7 @@
             this.Controls.Add(this.label3);
             this.Name = "uc_HistorialCliente";
             this.Size = new System.Drawing.Size(1149, 722);
+            this.Load += new System.EventHandler(this.uc_HistorialCliente_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

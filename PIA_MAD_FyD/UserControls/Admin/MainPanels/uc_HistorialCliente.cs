@@ -22,7 +22,31 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
 
         }
 
+        //RFC
         private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void uc_HistorialCliente_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        //AÑO
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Generar Reporte
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //ListView para mostrar reporte
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

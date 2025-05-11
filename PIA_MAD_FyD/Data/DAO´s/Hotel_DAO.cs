@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PIA_MAD_FyD.Data.Entidades;
+using PIA_MAD_FyD.Helpers.HelpClasses;
 using PIA_MAD_FyD.UserControls.Admin.MainPanels;
 
 namespace PIA_MAD_FyD.Data.DAO_s
@@ -365,5 +366,182 @@ namespace PIA_MAD_FyD.Data.DAO_s
         }
 
 
+        //Hoteles por ubicaicon
+        public static List<Hotel> ObtenerHotelesPorUbicacion(string pais, string estado, string ciudad)
+        {
+            List<Hotel> hoteles = new List<Hotel>();
+
+            string query = @"
+                            SELECT id_Hotel, nombre 
+                            FROM tbl_Hotel 
+                            INNER JOIN tbl_Ubicacion ON tbl_Hotel.ubicacion = tbl_Ubicacion.id_Ubicacion
+                            WHERE pais = @pais AND estado = @estado AND ciudad = @ciudad";
+
+            using (SqlConnection conexion = BD_Connection.ObtenerConexion())
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@pais", pais);
+                    cmd.Parameters.AddWithValue("@estado", estado);
+                    cmd.Parameters.AddWithValue("@ciudad", ciudad);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Hotel hotel = new Hotel
+                            {
+                                id_Hotel = Convert.ToInt32(reader["id_Hotel"]),
+                                nombre = reader["nombre"].ToString()
+                            };
+
+                            hoteles.Add(hotel);
+                        }
+                    }
+                }
+            }
+
+            return hoteles;
+        }
+
+        //Ocupaciones
+        public static List<Ocupacion> ObtenerOcupacionPorHotel(string pais, string estado, string ciudad, string hotel, string anio)
+        {
+            List<Ocupacion> ocupaciones = new List<Ocupacion>();
+
+            // Aquí va la consulta a la base de datos
+            string query = @"SELECT 
+                    u.ciudad AS Ciudad, 
+                    h.nombre AS NombreHotel, 
+                    YEAR(r.fecha_Ini) AS Anio, 
+                    MONTH(r.fecha_Ini) AS Mes, 
+                    hab.nivel AS TipoHabitacion, 
+                    COUNT(hab.id_Habitacion) AS CantidadHabitaciones, 
+                    COUNT(r.id_Reservacion) AS CantidadReservaciones, 
+                    SUM(r.cant_Huespedes) AS CantidadPersonasHospedadas,
+                    (CAST(COUNT(r.id_Reservacion) AS DECIMAL) / COUNT(hab.id_Habitacion)) * 100 AS PorcentajeOcupacion
+                FROM tbl_Reservacion r
+                INNER JOIN tbl_HabitacionReserva hr ON r.id_Reservacion = hr.id_Reservacion
+                INNER JOIN tbl_Habitacion hab ON hr.id_Habitacion = hab.id_Habitacion
+                INNER JOIN tbl_Hotel h ON hab.id_Hotel = h.id_Hotel
+                INNER JOIN tbl_Ubicacion u ON h.ubicacion = u.id_Ubicacion
+                WHERE u.pais = @Pais AND u.estado = @Estado AND u.ciudad = @Ciudad 
+                AND YEAR(r.fecha_Ini) = @Anio";
+
+            if (!string.IsNullOrWhiteSpace(hotel) && hotel != "Todos")
+            {
+                query += " AND h.nombre = @Hotel";
+            }
+
+            query += @" GROUP BY 
+              u.ciudad, h.nombre, YEAR(r.fecha_Ini), MONTH(r.fecha_Ini), hab.nivel";
+
+
+            // Ejecutar consulta y llenar la lista
+            using (var connection = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Pais", pais);
+                command.Parameters.AddWithValue("@Estado", estado);
+                command.Parameters.AddWithValue("@Ciudad", ciudad);
+                command.Parameters.AddWithValue("@Anio", anio);
+                if (!string.IsNullOrWhiteSpace(hotel) && hotel != "Todos")
+                {
+                    command.Parameters.AddWithValue("@Hotel", hotel);
+                }
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ocupaciones.Add(new Ocupacion
+                        {
+                            Ciudad = reader["Ciudad"].ToString(),
+                            NombreHotel = reader["NombreHotel"].ToString(),
+                            Anio = Convert.ToInt32(reader["Anio"]),
+                            Mes = reader["Mes"].ToString(),
+                            TipoHabitacion = reader["TipoHabitacion"].ToString(),
+                            CantidadHabitaciones = Convert.ToInt32(reader["CantidadHabitaciones"]),
+                            PorcentajeOcupacion = Convert.ToDecimal(reader["PorcentajeOcupacion"]),
+                            CantidadPersonasHospedadas = Convert.ToInt32(reader["CantidadPersonasHospedadas"])
+                        });
+                    }
+                }
+            }
+
+            return ocupaciones;
+        }
+
+
+        //Ventas
+        public static List<ReporteVenta> ObtenerReporteVentas(string pais, string estado, string ciudad, string hotel, int anio)
+        {
+            List<ReporteVenta> reportes = new List<ReporteVenta>();
+
+            string query = @"
+    SELECT 
+        h.nombre AS NombreHotel,
+        u.ciudad AS Ciudad,
+        YEAR(r.fecha_Ini) AS Anio,
+        MONTH(r.fecha_Ini) AS Mes,
+        ISNULL(SUM(p.total), 0) AS IngresosHospedaje,
+        ISNULL(SUM(se.precio), 0) AS ServiciosExtra,
+        ISNULL(SUM(p.total) + SUM(se.precio), 0) AS IngresoTotal
+    FROM tbl_Reservacion r
+    LEFT JOIN tbl_CheckOut co ON r.id_Reservacion = co.id_Reservacion
+    LEFT JOIN tbl_ServicioCheckOut sco ON co.id_CheckOut = sco.id_CheckOut
+    LEFT JOIN tbl_ServicioExtra se ON sco.id_ServicioExtra = se.id_ServicioExtra
+    LEFT JOIN tbl_Pago p ON co.id_CheckOut = p.id_CheckOut
+    INNER JOIN tbl_HabitacionReserva hr ON r.id_Reservacion = hr.id_Reservacion
+    INNER JOIN tbl_Habitacion hab ON hr.id_Habitacion = hab.id_Habitacion
+    INNER JOIN tbl_Hotel h ON hab.id_Hotel = h.id_Hotel
+    INNER JOIN tbl_Ubicacion u ON h.ubicacion = u.id_Ubicacion
+    WHERE u.pais = @Pais 
+      AND u.estado = @Estado 
+      AND u.ciudad = @Ciudad 
+      AND YEAR(r.fecha_Ini) = @Anio";
+
+            if (!string.IsNullOrWhiteSpace(hotel) && hotel != "Todos")
+            {
+                query += " AND h.nombre = @Hotel";
+            }
+
+            query += @"
+GROUP BY h.nombre, u.ciudad, YEAR(r.fecha_Ini), MONTH(r.fecha_Ini)";
+
+
+
+            using (var connection = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Pais", pais);
+                command.Parameters.AddWithValue("@Estado", estado);
+                command.Parameters.AddWithValue("@Ciudad", ciudad);
+                command.Parameters.AddWithValue("@Anio", anio);
+
+                if (!string.IsNullOrWhiteSpace(hotel) && hotel != "Todos")
+                {
+                    command.Parameters.AddWithValue("@Hotel", hotel);
+                }
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        reportes.Add(new ReporteVenta
+                        {
+                            NombreHotel = reader["NombreHotel"].ToString(),
+                            Ciudad = reader["Ciudad"].ToString(),
+                            Anio = Convert.ToInt32(reader["Anio"]),
+                            Mes = Convert.ToInt32(reader["Mes"]),
+                            IngresosHospedaje = Convert.ToDecimal(reader["IngresosHospedaje"]),
+                            ServiciosExtra = Convert.ToDecimal(reader["ServiciosExtra"]),
+                            IngresoTotal = Convert.ToDecimal(reader["IngresoTotal"])
+                        });
+                    }
+                }
+            }
+
+            return reportes;
+        }
     }
 }

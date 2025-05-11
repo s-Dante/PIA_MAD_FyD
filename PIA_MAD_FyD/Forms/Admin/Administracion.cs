@@ -75,7 +75,7 @@ namespace PIA_MAD_FyD.Forms.Admin
                     controlAMostrar = new uc_ModificarHabitacion(UsuarioLogeado);
                     break;
                 case "ReporteOcupacion":
-                    controlAMostrar = new uc_ReporteOcupacion();
+                    controlAMostrar = new uc_ReporteOcupacion(UsuarioLogeado);
                     break;
                 case "ReporteVentas":
                     controlAMostrar = new uc_ReporteVentas();

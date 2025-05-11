@@ -175,6 +175,9 @@
       <DependentUpon>BorderRadius.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\FormManager\FormManager.cs" />
+    <Compile Include="Helpers\HelpClasses\Ocupacion.cs" />
+    <Compile Include="Helpers\HelpClasses\ReporteVenta.cs" />
+    <Compile Include="Helpers\HelpClasses\ResumenOcupacion.cs" />
     <Compile Include="Helpers\Validations\Validate_CodigoPostal.cs" />
     <Compile Include="Helpers\Validations\Validate_Correo.cs" />
     <Compile Include="Helpers\Validations\Validate_NumCasa.cs" />
