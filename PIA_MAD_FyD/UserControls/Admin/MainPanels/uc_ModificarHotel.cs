@@ -346,7 +346,13 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         //Numero
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
-
+            if (textBox4.Text.Length > 6)
+            {
+                // Si supera, truncar el texto a los primeros 6 caracteres
+                textBox4.Text = textBox4.Text.Substring(0, 6);
+                // Mover el cursor al final del texto
+                textBox4.SelectionStart = textBox4.Text.Length;
+            }
         }
 
         //Boton Modificar

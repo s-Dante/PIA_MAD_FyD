@@ -21,71 +21,9 @@ namespace PIA_MAD_FyD.Forms.Operatives
             InitializeComponent();
             this.idPago = idPago;
 
-            InicializarDiseño();
+            GenerarCFDIFalso();
         }
 
-        //Diseño de la Factura
-        private void InicializarDiseño()
-        {
-            // Datos del Receptor
-            Label rfcReceptorLabel = new Label() { Text = "RFC Receptor", Location = new Point(10, 20) };
-            TextBox rfcReceptorTextBox = new TextBox() { Location = new Point(120, 20), Width = 150 };
-            Controls.Add(rfcReceptorLabel);
-            Controls.Add(rfcReceptorTextBox);
-
-            Label nombreReceptorLabel = new Label() { Text = "Nombre Receptor", Location = new Point(10, 60) };
-            TextBox nombreReceptorTextBox = new TextBox() { Location = new Point(120, 60), Width = 150 };
-            Controls.Add(nombreReceptorLabel);
-            Controls.Add(nombreReceptorTextBox);
-
-            Label usoCFDILabel = new Label() { Text = "Uso CFDI", Location = new Point(10, 100) };
-            ComboBox usoCFDIComboBox = new ComboBox() { Location = new Point(120, 100), Width = 150 };
-            usoCFDIComboBox.Items.AddRange(new string[] { "G03 - Gastos Generales", "P01 - Pagos por ventas", "I01 - Ingresos" });
-            Controls.Add(usoCFDILabel);
-            Controls.Add(usoCFDIComboBox);
-
-            // DataGridView para los detalles de la factura (habitaciones)
-            DataGridView facturaDetailsGrid = new DataGridView() { Location = new Point(10, 140), Width = 400, Height = 200 };
-            facturaDetailsGrid.Columns.Add("Descripcion", "Descripción");
-            facturaDetailsGrid.Columns.Add("Cantidad", "Cantidad");
-            facturaDetailsGrid.Columns.Add("ValorUnitario", "Valor Unitario");
-            facturaDetailsGrid.Columns.Add("Importe", "Importe");
-            Controls.Add(facturaDetailsGrid);
-
-            // Campos para Totales
-            Label subtotalLabel = new Label() { Text = "Subtotal", Location = new Point(10, 360) };
-            TextBox subtotalTextBox = new TextBox() { Location = new Point(120, 360), Width = 150, ReadOnly = true };
-            Controls.Add(subtotalLabel);
-            Controls.Add(subtotalTextBox);
-
-            Label descuentoLabel = new Label() { Text = "Descuento", Location = new Point(10, 400) };
-            TextBox descuentoTextBox = new TextBox() { Location = new Point(120, 400), Width = 150, Text = "0" };
-            descuentoTextBox.TextChanged += (sender, args) => CalcularTotal(facturaDetailsGrid, subtotalTextBox, descuentoTextBox);
-            Controls.Add(descuentoLabel);
-            Controls.Add(descuentoTextBox);
-
-            Label totalLabel = new Label() { Text = "Total", Location = new Point(10, 440) };
-            TextBox totalTextBox = new TextBox() { Location = new Point(120, 440), Width = 150, ReadOnly = true };
-            Controls.Add(totalLabel);
-            Controls.Add(totalTextBox);
-
-            // Métodos de pago
-            Label metodoPagoLabel = new Label() { Text = "Método de Pago", Location = new Point(10, 480) };
-            ComboBox metodoPagoComboBox = new ComboBox() { Location = new Point(120, 480), Width = 150 };
-            metodoPagoComboBox.Items.AddRange(new string[] { "PUE - Pago Único", "PPD - Pago Parcial" });
-            Controls.Add(metodoPagoLabel);
-            Controls.Add(metodoPagoComboBox);
-
-            // Botón de Guardar
-            Button guardarButton = new Button() { Text = "Guardar y Generar Factura", Location = new Point(10, 520), Width = 150 };
-            guardarButton.Click += (sender, args) => GuardarFactura(rfcReceptorTextBox, nombreReceptorTextBox, usoCFDIComboBox, facturaDetailsGrid, subtotalTextBox, descuentoTextBox, totalTextBox, metodoPagoComboBox);
-            Controls.Add(guardarButton);
-
-            // Botón de Imprimir
-            Button imprimirButton = new Button() { Text = "Imprimir Factura", Location = new Point(170, 520), Width = 150 };
-            imprimirButton.Click += (sender, args) => ImprimirFactura();
-            Controls.Add(imprimirButton);
-        }
         private void CalcularTotal(DataGridView facturaDetailsGrid, TextBox subtotalTextBox, TextBox descuentoTextBox)
         {
             decimal subtotal = 0;
@@ -103,21 +41,179 @@ namespace PIA_MAD_FyD.Forms.Operatives
             totalTextBox.Text = total.ToString("F2");
         }
 
-        private void GuardarFactura(TextBox rfcReceptorTextBox, TextBox nombreReceptorTextBox, ComboBox usoCFDIComboBox, DataGridView facturaDetailsGrid, TextBox subtotalTextBox, TextBox descuentoTextBox, TextBox totalTextBox, ComboBox metodoPagoComboBox)
+        //Falseo de codigo CFDI:
+        private void GenerarCFDIFalso()
         {
-            // Aquí deberías guardar la factura en la base de datos
-            // Insertar los datos en tbl_Factura y tbl_FacturaDetalle
-            MessageBox.Show("Factura guardada con éxito.");
+            // Generar sellos y cadena
+            string selloDigitalCFDI = GenerarSelloDigital();
+            string selloSAT = GenerarSelloDigital();
+            string cadenaCertificacionSAT = GenerarCadenaCertificacion();
+
+            // Asignar valores a los labels
+            SetLabelText(label26, selloDigitalCFDI, 400);
+            SetLabelText(label27, selloSAT, 400);
+            SetLabelText(label28, cadenaCertificacionSAT, 400);
+
+
+            string razonSocial = "DAFER CORP S.A de C.V";
+            string rfc = "DFC040811FYD";
+            string regimenFiscal = "Opcional para grupos sociales";
+            string direccion = "Seleccionar"; // Aquí podrías implementar un selector o dejarlo fijo
+
+            // Agregar los elementos al ListView
+            listView1.Items.Add(new ListViewItem("Razón Social: " + razonSocial));
+            listView1.Items.Add(new ListViewItem("RFC: " + rfc));
+            listView1.Items.Add(new ListViewItem("Régimen Fiscal: " + regimenFiscal));
+            listView1.Items.Add(new ListViewItem("Dirección: " + direccion));
         }
 
-        private void ImprimirFactura()
+        private string GenerarSelloDigital()
         {
-            // Aquí puedes implementar la lógica de impresión
-            // Esto podría incluir la generación de un archivo PDF o XML para la factura
-            MessageBox.Show("Imprimiendo factura...");
+            // Generar un hash aleatorio (solo para fines de demostración)
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 64; i++)
+            {
+                sb.Append(random.Next(0, 16).ToString("X"));
+            }
+            return sb.ToString();
+        }
+
+        private string GenerarCadenaCertificacion()
+        {
+            // Simulación de una cadena de certificación
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 32; i++)
+            {
+                sb.Append(random.Next(0, 16).ToString("X"));
+            }
+            return sb.ToString();
+        }
+
+        private void SetLabelText(Label label, string text, int maxWidth)
+        {
+            label.MaximumSize = new System.Drawing.Size(maxWidth, 0); // Ancho máximo, altura automática
+            label.AutoSize = true; // Ajustar altura según contenido
+            label.Text = text;
         }
 
         private void Factura_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        //Muestra la imagen del logo de la empresa
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //ListView para mostrar datos del emisor AKA Hotel de la reservacion
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Listview para mostrar la informacion de factura
+        private void listView2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //ListView para msotrar la informacion del receptor AKA cliente
+        private void listView3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Label para mostrar el nombre del hotel
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        //Label para mostrar la direccion del hotel
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Label para mostrar la fecha de emision AKA fecha actual al momento de hacerse
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Combobox para seleccionar el uso de CFDI del cliente
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Combobox para mostrar el regimen fiscal del cliente
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //ListView para mstrar la informaicon de cada habitacion que se reservo
+        private void listView4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Combobox para seleccinar el metodo de pago PUE o PPD
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Label para mostrar la forma de pago seleccionada al momento de pagar
+        private void label22_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Listbox par mostrar los servicios extra seleccionados en la reservacion
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //ListBox para mostrar los descuentos que se aplicaron
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Label para poner el subtotal
+        private void label17_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Label para mostrar el iva
+        private void label18_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Label para poner el total de pago
+        private void label19_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //PictureBox para poner el qr
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Boton para generar e imprimr la factura
+        private void button1_Click(object sender, EventArgs e)
         {
 
         }

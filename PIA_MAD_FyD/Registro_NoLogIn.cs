@@ -45,6 +45,9 @@ namespace PIA_MAD_FyD
             this.Controls.Add(emailCheck); // Agregar el tooltip al 
 
             textBox5.KeyPress += textBox5_KeyPress;
+
+            radioButton1.Checked = false;
+            radioButton2.Checked = true;
         }
 
         //Return to the main Form
@@ -67,7 +70,8 @@ namespace PIA_MAD_FyD
 
         private void Registro_NoLogIn_Load(object sender, EventArgs e)
         {
-
+            radioButton1.Checked = false;
+            radioButton2.Checked = true;
         }
         private void Registro_NoLogIn_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -238,7 +242,27 @@ namespace PIA_MAD_FyD
             nuevoUsuario.correo = textBox2.Text;
             nuevoUsuario.fecha_Nacimiento = dateTimePicker1.Value;
             nuevoUsuario.telefono = textBox5.Text;
-            nuevoUsuario.tipo_Usuario = radioButton1.Checked ? 'A' : 'O'; // 'A' para Administrador, 'O' para Operativo
+
+            char tipoUsuario = '\0'; // Inicializar tipo de usuario como 
+
+            // Verificar si se seleccionó un tipo de usuario
+            if (radioButton1.Checked)
+            {
+                tipoUsuario = 'A'; // 'A' para Administrador
+            }
+            else if (radioButton2.Checked)
+            {
+                tipoUsuario = 'O'; // 'O' para Operativo
+            }
+
+            if (tipoUsuario == '\0')
+            {
+                MessageBox.Show("Debe seleccionar un tipo de usuario", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            nuevoUsuario.tipo_Usuario = tipoUsuario;
+
             nuevoUsuario.fecha_Registro = DateTime.Now;
             nuevoUsuario.fecha_Modificaion = DateTime.Now;
             nuevoUsuario.estatus = 'A'; // 'A' para activo, 'B' para inactivo
@@ -276,7 +300,7 @@ namespace PIA_MAD_FyD
             {
                 MessageBox.Show("El correo no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }else
+            } else
             {
                 if (Validate_Correo.EsCorreoValido(nuevoUsuario.correo) == false)
                 {
@@ -286,11 +310,11 @@ namespace PIA_MAD_FyD
             }
 
             //Contraseña
-            if(string.IsNullOrEmpty(pswd))
+            if (string.IsNullOrEmpty(pswd))
             {
                 MessageBox.Show("El campo \"contraseña\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }else if(Validate_Password.EsPasswordValida(pswd) == false)
+            } else if (Validate_Password.EsPasswordValida(pswd) == false)
             {
                 MessageBox.Show("La contraseña no cumple con los requisitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -308,7 +332,7 @@ namespace PIA_MAD_FyD
             {
                 MessageBox.Show("El campo \"numero de nomina\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }else
+            } else
             {
                 nuevoUsuario.num_Nomina = int.Parse(numeroNomina);
             }
@@ -317,13 +341,6 @@ namespace PIA_MAD_FyD
             if (string.IsNullOrEmpty(claveAcceso))
             {
                 MessageBox.Show("El campo \"clave de administracion\" no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            //Tipo de Usuario
-            if (nuevoUsuario.tipo_Usuario == '\0')
-            {
-                MessageBox.Show("Debe seleccionar un tipo de usuario", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

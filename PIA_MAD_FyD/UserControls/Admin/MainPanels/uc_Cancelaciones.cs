@@ -89,22 +89,18 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         {
             try
             {
-                // Validar que el campo de motivo no esté vacío
                 if (string.IsNullOrWhiteSpace(textBox1.Text))
                 {
                     MessageBox.Show("Por favor, ingresa un motivo para la cancelación.", "Motivo Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Obtener el ID de la reservación guardado en el Tag del TextBox
                 Guid idReservacion = (Guid)textBox2.Tag;
 
-                // Llamar al método para cancelar la reservación
                 Reservacion_DAO.CancelarReservacion(idReservacion, textBox1.Text, usuarioLogeado.num_Nomina);
 
                 MessageBox.Show("La reservación ha sido cancelada correctamente.", "Cancelación Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Limpiar los campos y desactivar el botón
                 textBox2.Clear();
                 textBox1.Clear();
                 textBox1.Enabled = false;
@@ -112,9 +108,11 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ocurrió un error al cancelar la reservación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         //Para ingresar el motivo de la cancelacion
         private void textBox1_TextChanged(object sender, EventArgs e)

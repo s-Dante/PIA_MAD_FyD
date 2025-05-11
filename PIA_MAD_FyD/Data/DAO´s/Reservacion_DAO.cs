@@ -99,11 +99,20 @@ namespace PIA_MAD_FyD.Data.DAO_s
                     comando.ExecuteNonQuery();
                 }
             }
+            catch (SqlException ex) when (ex.Number == 50001)
+            {
+                throw new Exception("La reservación ya ha sido cancelada previamente.");
+            }
+            catch (SqlException ex) when (ex.Number == 50000)
+            {
+                throw new Exception("No se puede cancelar la reservación porque ya se registró un check-in.");
+            }
             catch (Exception ex)
             {
                 throw new Exception("Error al cancelar la reservación: " + ex.Message);
             }
         }
+
 
 
         //Consultar reservacion

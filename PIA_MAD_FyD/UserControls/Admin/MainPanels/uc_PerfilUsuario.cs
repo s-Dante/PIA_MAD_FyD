@@ -12,6 +12,10 @@ using PIA_MAD_FyD.Data.Entidades;
 using PIA_MAD_FyD.Helpers.Validations;
 using PIA_MAD_FyD.ToolTips_PopUps;
 using PIA_MAD_FyD.Data.DAO_s;
+using PIA_MAD_FyD.Helpers.FormManager;
+using PIA_MAD_FyD.Forms.Operatives;
+using PIA_MAD_FyD.Forms.Admin;
+using PIA_MAD_FyD.Forms;
 
 namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
 {
@@ -23,6 +27,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
         private PasswordCheck pswdCheck; // Popup para la contraseña
         private EmailCheck emailCheck; // Tooltip para el correo
         private bool correoBien = false;
+        private bool isAdmin = true;
         public uc_PerfilUsuario(Usuario usuarioLogeado)
         {
             InitializeComponent();
@@ -209,9 +214,14 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
                 usuario.telefono = textBox5.Text;
                 usuario.fecha_Nacimiento = dateTimePicker1.Value;
                 if (radioButton1.Checked)
+                {
                     usuario.tipo_Usuario = 'A';
+                }
                 else
+                {
                     usuario.tipo_Usuario = 'O';
+                    isAdmin = false;
+                }
                 usuario.usuario_Modifico = usuario.num_Nomina;
 
 
@@ -272,6 +282,16 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
                     Usuario_DAO.ActualizarUsuario(usuario);
                     MessageBox.Show("Cambios realizados exitosamente :)", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    if (isAdmin == false)
+                    {
+                        MessageBox.Show("Su rol ha cambiado a Operativo. Se cerrará la sesión actual.", "Cambio de Rol", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Cerrar el formulario actual
+                        FormManager.ShowForm<Form1>(null, cerrarAppAlCerrar: false, ocultarActual: false);
+
+                        Form currentForm = this.FindForm();
+                        currentForm.Hide();
+                    }
                 }
                 catch (Exception ex)
                 {

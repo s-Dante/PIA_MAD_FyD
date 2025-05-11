@@ -210,13 +210,18 @@ namespace PIA_MAD_FyD.Data.DAO_s
         }
 
         //Metodo para obtener todos los usuarios registrados:
-        public static List<Usuario> ObtenerUsuarios()
+        public static List<Usuario> ObtenerUsuarios(int numNominaLogeado)
         {
             List<Usuario> usuarios = new List<Usuario>();
+
             using (SqlConnection conexion = BD_Connection.ObtenerConexion())
             {
                 SqlCommand comando = new SqlCommand("sp_ObtenerUsuarios", conexion);
                 comando.CommandType = CommandType.StoredProcedure;
+
+                // Enviar el parámetro del usuario logueado
+                comando.Parameters.AddWithValue("@num_Nomina", numNominaLogeado);
+
                 using (SqlDataReader reader = comando.ExecuteReader())
                 {
                     while (reader.Read())
@@ -236,6 +241,7 @@ namespace PIA_MAD_FyD.Data.DAO_s
                     }
                 }
             }
+
             return usuarios;
         }
     }

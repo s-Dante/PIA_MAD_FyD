@@ -28,7 +28,7 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
             InitializeComponent();
 
             this.usuarioLogeado = usuarioLogeado;
-            listaUsuarios = Usuario_DAO.ObtenerUsuarios();
+            listaUsuarios = Usuario_DAO.ObtenerUsuarios(usuarioLogeado.num_Nomina);
            
             listView1.FullRowSelect = true;
 
