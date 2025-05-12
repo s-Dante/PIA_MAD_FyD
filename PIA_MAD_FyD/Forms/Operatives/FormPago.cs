@@ -145,7 +145,7 @@ namespace PIA_MAD_FyD.Forms.Operatives
                 MessageBox.Show("Pago registrado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Navegar a la ventana de facturación
-                FormManager.ShowForm<Factura>(this, cerrarAppAlCerrar: false, ocultarActual: true, idPago);
+                FormManager.ShowForm<Factura>(this, cerrarAppAlCerrar: false, ocultarActual: true, idPago, usuarioLogeado);
             }
             catch (Exception ex)
             {

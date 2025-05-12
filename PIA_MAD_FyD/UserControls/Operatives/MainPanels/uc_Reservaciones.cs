@@ -12,6 +12,8 @@ using PIA_MAD_FyD.Data.DAO_s;
 using PIA_MAD_FyD.Services.CountryData;
 using System.IO;
 using PIA_MAD_FyD.Forms.Operatives;
+using System.Data.SqlClient;
+using PIA_MAD_FyD.Data;
 
 namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
 {
@@ -652,5 +654,54 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
         {
 
         }
+
+        public static DataTable ObtenerHistorialCliente(string rfc, int año)
+        {
+            string query = @"
+        SELECT 
+            C.nombre + ' ' + C.apellido_Paterno + ' ' + C.apellido_Materno AS Nombre,
+            H.ciudad,
+            HT.nombre AS Hotel,
+            HA.tipo_Habitacion AS TipoHabitacion,
+            HA.id_Habitacion AS NumeroHabitacion,
+            R.cant_Huespedes AS NumeroPersonas,
+            R.id_Reservacion AS CodigoReservacion,
+            R.fecha_Ini AS FechaReservacion,
+            R.fecha_CheckIn AS FechaCheckIn,
+            R.fecha_CheckOut AS FechaCheckOut,
+            R.status_Reservacion AS Estatus,
+            R.anticipo_Pagado AS Anticipo,
+            R.monto_Hospedaje AS MontoHospedaje,
+            R.monto_ServiciosAdicionales AS MontoServicios,
+            P.total_Pago AS TotalFactura
+        FROM Reservacion R
+        INNER JOIN Cliente C ON R.rfc_Cliente = C.rfc
+        INNER JOIN Hotel HT ON R.id_Hotel = HT.id_Hotel
+        INNER JOIN Habitacion HA ON R.id_Habitacion = HA.id_Habitacion
+        INNER JOIN Pago P ON R.id_Reservacion = P.id_Reservacion
+        WHERE R.rfc_Cliente = @RFC";
+
+            if (año != 0)
+            {
+                query += " AND YEAR(R.fecha_Ini) = @Año";
+            }
+
+            using (SqlConnection conn = BD_Connection.ObtenerConexion())
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@RFC", rfc);
+                    if (año != 0)
+                        cmd.Parameters.AddWithValue("@Año", año);
+
+                    DataTable dataTable = new DataTable();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dataTable);
+
+                    return dataTable;
+                }
+            }
+        }
+
     }
 }

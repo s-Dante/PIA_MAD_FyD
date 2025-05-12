@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PIA_MAD_FyD.Data.Entidades;
 using System.Windows.Forms;
+using PIA_MAD_FyD.Helpers.HelpClasses;
 
 namespace PIA_MAD_FyD.Data.DAO_s
 {
@@ -834,6 +835,94 @@ namespace PIA_MAD_FyD.Data.DAO_s
         }
 
 
+        //Historial cliente
+        public static List<ReservacionHelp> ObtenerHistorialCliente(string rfc, int? año)
+        {
+            List<ReservacionHelp> historial = new List<ReservacionHelp>();
+
+            string query = @"
+        SELECT 
+            r.id_Reservacion,
+            r.fecha_Ini AS FechaInicio,
+            r.fecha_Fin AS FechaFin,
+            r.cant_Habitaciones AS CantHabitaciones,
+            r.cant_Huespedes AS CantHuespedes,
+            r.anticipo_Pagado AS AnticipoPagado,
+            r.fecha_Registro AS FechaRegistro,
+            c.rfc AS ClienteRFC,
+            c.nombre + ' ' + c.apellido_Paterno + ' ' + c.apellido_Materno AS ClienteNombre,
+            h.nombre AS HotelNombre,
+            u.ciudad AS Ciudad
+        FROM tbl_Reservacion r
+        INNER JOIN tbl_Cliente c ON r.id_Cliente = c.rfc
+        LEFT JOIN tbl_HabitacionReserva hr ON hr.id_Reservacion = r.id_Reservacion
+        LEFT JOIN tbl_Habitacion hab ON hr.id_Habitacion = hab.id_Habitacion
+        LEFT JOIN tbl_Hotel h ON hab.id_Hotel = h.id_Hotel
+        LEFT JOIN tbl_Ubicacion u ON h.ubicacion = u.id_Ubicacion
+        WHERE (@RFC IS NULL OR c.rfc = @RFC)
+        AND (@Año IS NULL OR YEAR(r.fecha_Ini) = @Año)
+        ORDER BY r.fecha_Ini DESC";
+
+            using (SqlConnection conn = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@RFC", string.IsNullOrEmpty(rfc) ? (object)DBNull.Value : rfc);
+                cmd.Parameters.AddWithValue("@Año", año.HasValue ? (object)año.Value : DBNull.Value);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ReservacionHelp reservacion = new ReservacionHelp
+                        {
+                            idReservacion = Guid.Parse(reader["id_Reservacion"].ToString()),
+                            fechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
+                            fechaFin = Convert.ToDateTime(reader["FechaFin"]),
+                            cantHabitaciones = Convert.ToInt32(reader["CantHabitaciones"]),
+                            cantHuespedes = Convert.ToInt32(reader["CantHuespedes"]),
+                            anticipoPagado = Convert.ToDecimal(reader["AnticipoPagado"]),
+                            fechaRegistro = Convert.ToDateTime(reader["FechaRegistro"]),
+                            clienteRFC = reader["ClienteRFC"].ToString(),
+                            clienteNombre = reader["ClienteNombre"].ToString(),
+                            hotelNombre = reader["HotelNombre"].ToString(),
+                            ciudad = reader["Ciudad"].ToString()
+                        };
+
+                        // Obtención de habitaciones relacionadas
+                        reservacion.habitaciones = ObtenerHabitacionesReservadas(reservacion.idReservacion);
+                        historial.Add(reservacion);
+                    }
+                }
+            }
+
+            return historial;
+        }
+
+        private static List<int> ObtenerHabitacionesReservadas(Guid idReservacion)
+        {
+            List<int> habitaciones = new List<int>();
+
+            string query = @"
+        SELECT id_Habitacion 
+        FROM tbl_HabitacionReserva 
+        WHERE id_Reservacion = @IdReservacion";
+
+            using (SqlConnection conn = BD_Connection.ObtenerConexion())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdReservacion", idReservacion);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        habitaciones.Add(Convert.ToInt32(reader["id_Habitacion"]));
+                    }
+                }
+            }
+
+            return habitaciones;
+        }
 
     }
 }

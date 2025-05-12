@@ -12,16 +12,29 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Data.SqlClient;
 using PIA_MAD_FyD.Data;
+using System.IO;
+using PIA_MAD_FyD.Data.Entidades;
 
 namespace PIA_MAD_FyD.Forms.Operatives
 {
-    public partial class Factura: Form
+    public partial class Factura : Form
     {
         private int idPagoF;
-        public Factura(int idPago)
+
+        public string folio;
+        public string fechaEmision;
+        public string fechaCertificacion;
+
+        public string servicio;
+        public string precio;
+
+
+        Usuario usuarioLogeado;
+        public Factura(int idPago, Usuario usuarioLogeado)
         {
             InitializeComponent();
             idPagoF = idPago;
+            this.usuarioLogeado = usuarioLogeado;
 
             GenerarCFDIFalso();
             LlenarListView1();
@@ -132,9 +145,9 @@ namespace PIA_MAD_FyD.Forms.Operatives
         {
             listView2.Items.Clear();
 
-            string folio = Guid.NewGuid().ToString(); // Generar GUID para el folio
-            string fechaEmision = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string fechaCertificacion = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            folio = Guid.NewGuid().ToString(); // Generar GUID para el folio
+            fechaEmision = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            fechaCertificacion = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             string[,] datosComprobante = {
                 { "Tipo de comprobante", "I - Ingreso" },
@@ -311,8 +324,8 @@ namespace PIA_MAD_FyD.Forms.Operatives
                         {
                             while (reader.Read())
                             {
-                                string servicio = reader["nombre"].ToString();
-                                string precio = reader["precio"].ToString();
+                                servicio = reader["nombre"].ToString();
+                                precio = reader["precio"].ToString();
                                 listBox2.Items.Add(servicio + " - $" + precio);
                             }
                         }
@@ -493,9 +506,9 @@ namespace PIA_MAD_FyD.Forms.Operatives
         }
 
 
-        public void loadSubtotalANDPay (Label labelFormaPago, Label labelSubtotal, Label labelTotal,  int idPago)
+        public void loadSubtotalANDPay(Label labelFormaPago, Label labelSubtotal, Label labelTotal, int idPago)
         {
-            using(SqlConnection conection = BD_Connection.ObtenerConexion())
+            using (SqlConnection conection = BD_Connection.ObtenerConexion())
             {
                 string query = @"
                                 SELECT P.forma_Pago, P.total
@@ -662,16 +675,273 @@ namespace PIA_MAD_FyD.Forms.Operatives
 
         }
 
-        //Boton para generar e imprimr la factura
+        //Boton para guardar e imprimr la factura
         private void button1_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Guid folio = Guid.NewGuid(); // ID único
+                string usoCFDI = comboBox1.SelectedItem?.ToString().Split('-')[0].Trim(); // e.g. "G03"
+                string regimenFiscal = comboBox2.SelectedItem?.ToString(); // ya trae el código y descripción
+                string metodoPago = comboBox3.SelectedItem?.ToString().Split('-')[0].Trim(); // "PUE" o "PPD"
+                string formaPago = label22.Text[0].ToString(); // Primer carácter del texto, ej. 'T'
 
+                // Datos de la factura
+                decimal subtotal = decimal.Parse(label17.Text);
+                decimal total = decimal.Parse(label19.Text);
+                decimal iva = subtotal * 0.16m;
+
+                string selloSAT = label27.Text;
+                string selloCFDI = label26.Text;
+                string cadenaSAT = label28.Text;
+
+                string rfc_Emisor = label30.Text;
+                string direccionEmisor = label4.Text;
+                string nombreHotel = label3.Text;
+
+                string rfc_Receptor = listView3.Items[0].SubItems[1].Text;
+                string nombre_Receptor = listView3.Items[0].SubItems[0].Text;
+
+                int id_CheckOut;
+                using (SqlConnection connection = BD_Connection.ObtenerConexion())
+                {
+                    SqlCommand cmdGetCheckOut = new SqlCommand("SELECT id_CheckOut FROM tbl_Pago WHERE id_Pago = @idPago", connection);
+                    cmdGetCheckOut.Parameters.AddWithValue("@idPago", idPagoF);
+                    id_CheckOut = (int)cmdGetCheckOut.ExecuteScalar();
+                }
+
+                using (SqlConnection conn = BD_Connection.ObtenerConexion())
+                {
+                    SqlTransaction transaction = conn.BeginTransaction();
+                    try
+                    {
+                        // Insertar en tbl_Factura
+                        SqlCommand cmdFactura = new SqlCommand(@"
+                    INSERT INTO tbl_Factura 
+                    (folio, sello_SAT, lugar_Emision, fecha_Emision, subtotal, descuento, total, metodo_Pago, impuestos_Trasladados, impuestos_Retenidos, forma_Pago, certificado_SAT, fecha_Certificacion, 
+                     rfc_Emisor, regimen_Fiscal_Emisor, direccion_Emisor, sello_Emisor, rfc_Receptor, nombre_Receptor, uso_CFDI, usuario_Registra, id_CheckOut)
+                    VALUES 
+                    (@folio, @sello_SAT, @lugar_Emision, GETDATE(), @subtotal, 0, @total, @metodo_Pago, @iva, 0, @forma_Pago, @certificado_SAT, GETDATE(), 
+                     @rfc_Emisor, @regimenFiscal, @direccion_Emisor, @sello_Emisor, @rfc_Receptor, @nombre_Receptor, @uso_CFDI, @usuario, @idCheckOut)", conn, transaction);
+
+                        cmdFactura.Parameters.AddWithValue("@folio", folio);
+                        cmdFactura.Parameters.AddWithValue("@sello_SAT", selloSAT);
+                        cmdFactura.Parameters.AddWithValue("@lugar_Emision", "Sucursal del hotel");
+                        cmdFactura.Parameters.AddWithValue("@subtotal", subtotal);
+                        cmdFactura.Parameters.AddWithValue("@total", total);
+                        cmdFactura.Parameters.AddWithValue("@metodo_Pago", metodoPago);
+                        cmdFactura.Parameters.AddWithValue("@iva", iva);
+                        cmdFactura.Parameters.AddWithValue("@forma_Pago", formaPago);
+                        cmdFactura.Parameters.AddWithValue("@certificado_SAT", "CERTIFICADOFAKE123456");
+                        cmdFactura.Parameters.AddWithValue("@rfc_Emisor", rfc_Emisor);
+                        cmdFactura.Parameters.AddWithValue("@regimenFiscal", regimenFiscal);
+                        cmdFactura.Parameters.AddWithValue("@direccion_Emisor", direccionEmisor);
+                        cmdFactura.Parameters.AddWithValue("@sello_Emisor", selloCFDI);
+                        cmdFactura.Parameters.AddWithValue("@rfc_Receptor", rfc_Receptor);
+                        cmdFactura.Parameters.AddWithValue("@nombre_Receptor", nombre_Receptor);
+                        cmdFactura.Parameters.AddWithValue("@uso_CFDI", usoCFDI);
+                        cmdFactura.Parameters.AddWithValue("@usuario", usuarioLogeado.num_Nomina);
+                        cmdFactura.Parameters.AddWithValue("@idCheckOut", id_CheckOut);
+
+                        cmdFactura.ExecuteNonQuery();
+
+                        // Insertar en tbl_FacturaDetalle (habitaciones)
+                        foreach (ListViewItem item in listView4.Items)
+                        {
+                            string desc = $"Habitación {item.SubItems[0].Text} - {item.SubItems[3].Text} camas, {item.SubItems[4].Text}";
+                            decimal precio = decimal.Parse(item.SubItems[6].Text);
+
+                            SqlCommand cmdDetalle = new SqlCommand(@"
+                        INSERT INTO tbl_FacturaDetalle (descripcion, cantidad, valor_Unitario, importe, id_Factura)
+                        VALUES (@descripcion, 1, @valorUnitario, @importe, @idFactura)", conn, transaction);
+
+                            cmdDetalle.Parameters.AddWithValue("@descripcion", desc);
+                            cmdDetalle.Parameters.AddWithValue("@valorUnitario", precio);
+                            cmdDetalle.Parameters.AddWithValue("@importe", precio);
+                            cmdDetalle.Parameters.AddWithValue("@idFactura", folio);
+
+                            cmdDetalle.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show("Error al guardar la factura: " + ex.Message);
+                        return;
+                    }
+                }
+
+                // Guardar el PDF
+                // Obtener datos del cliente para el PDF
+                string fechaEmision = DateTime.Now.ToString("dd/MM/yyyy");
+                string fechaInicio = listView3.Items[0].SubItems[3].Text;
+                string fechaFin = listView3.Items[0].SubItems[4].Text;
+                string direccionCliente = listView3.Items[0].SubItems[2].Text;
+
+                // Guardar el PDF
+                GuardarFacturaComoPDF(
+                    folio.ToString(),
+                    nombre_Receptor,
+                    rfc_Receptor,
+                    direccionCliente,
+                    fechaEmision,
+                    fechaInicio,
+                    fechaFin,
+                    usoCFDI,
+                    regimenFiscal,
+                    nombreHotel,
+                    rfc_Emisor,
+                    direccionEmisor,
+                    listView4,
+                    listBox2,
+                    listBox1,
+                    metodoPago,
+                    formaPago,
+                    subtotal,
+                    total,
+                    selloCFDI,
+                    selloSAT,
+                    cadenaSAT
+                );
+
+                MessageBox.Show("Factura guardada e impresa correctamente.");
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error general: " + ex.Message);
+            }
         }
+
+        public void GuardarFacturaComoPDF(string folio, string nombreCliente, string rfcCliente, string direccionCliente,
+                           string fechaEmision, string fechaInicio, string fechaFin, string usoCFDI, string regimenFiscal,
+                           string nombreHotel, string rfcHotel, string direccionHotel,
+                           ListView listViewHabitaciones, ListBox listBoxServicios, ListBox listBoxDescuentos,
+                           string metodoPago, string formaPago, decimal subtotal, decimal total, string selloCFDI,
+                           string selloSAT, string cadenaSAT)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Title = "Guardar factura como PDF";
+                saveFileDialog.FileName = $"Factura_{folio}.pdf";
+                saveFileDialog.Filter = "Archivos PDF (*.pdf)|*.pdf";
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
+
+                string path = saveFileDialog.FileName;
+
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    Document doc = new Document(PageSize.A4, 40, 40, 40, 40);
+                    PdfWriter.GetInstance(doc, fs);
+                    doc.Open();
+
+                    var boldTitle = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 16);
+                    var boldSub = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
+                    var normal = FontFactory.GetFont(FontFactory.HELVETICA, 10);
+
+                    // Cabecera
+                    PdfPTable header = new PdfPTable(2);
+                    header.WidthPercentage = 100;
+                    float[] widths = { 3, 1 };
+                    header.SetWidths(widths);
+
+                    PdfPCell cellLeft = new PdfPCell();
+                    cellLeft.Border = iTextSharp.text.Rectangle.NO_BORDER;
+                    cellLeft.AddElement(new Paragraph("DAFER CORP S.A. de C.V.", boldTitle));
+                    cellLeft.AddElement(new Paragraph($"RFC: {rfcHotel}", normal));
+                    cellLeft.AddElement(new Paragraph($"Dirección: {direccionHotel}", normal));
+                    cellLeft.AddElement(new Paragraph($"Fecha Emisión: {fechaEmision}", normal));
+                    cellLeft.AddElement(new Paragraph($"Folio: {folio}", normal));
+                    header.AddCell(cellLeft);
+
+                    PdfPCell cellRight = new PdfPCell();
+                    cellRight.Border = iTextSharp.text.Rectangle.NO_BORDER;
+                    cellRight.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    // Puedes insertar un logo aquí si tienes imagen
+                    cellRight.AddElement(new Paragraph("FACTURA", boldTitle));
+                    header.AddCell(cellRight);
+
+                    doc.Add(header);
+                    doc.Add(new Paragraph("\n"));
+
+                    // Receptor
+                    doc.Add(new Paragraph("DATOS DEL CLIENTE", boldSub));
+                    doc.Add(new Paragraph($"Nombre: {nombreCliente}", normal));
+                    doc.Add(new Paragraph($"RFC: {rfcCliente}", normal));
+                    doc.Add(new Paragraph($"Dirección: {direccionCliente}", normal));
+                    doc.Add(new Paragraph($"Uso CFDI: {usoCFDI}", normal));
+                    doc.Add(new Paragraph($"Régimen Fiscal: {regimenFiscal}", normal));
+                    doc.Add(new Paragraph("\n"));
+
+                    // Fechas reservación
+                    doc.Add(new Paragraph("Detalles de Reservación", boldSub));
+                    doc.Add(new Paragraph($"Check-In: {fechaInicio}", normal));
+                    doc.Add(new Paragraph($"Check-Out: {fechaFin}", normal));
+                    doc.Add(new Paragraph("\n"));
+
+                    // Tabla de habitaciones
+                    PdfPTable tablaHab = new PdfPTable(listViewHabitaciones.Columns.Count);
+                    tablaHab.WidthPercentage = 100;
+                    foreach (ColumnHeader col in listViewHabitaciones.Columns)
+                        tablaHab.AddCell(new PdfPCell(new Phrase(col.Text, boldSub)));
+                    foreach (ListViewItem row in listViewHabitaciones.Items)
+                        foreach (ListViewItem.ListViewSubItem cell in row.SubItems)
+                            tablaHab.AddCell(new PdfPCell(new Phrase(cell.Text, normal)));
+                    doc.Add(new Paragraph("Habitaciones:", boldSub));
+                    doc.Add(tablaHab);
+                    doc.Add(new Paragraph("\n"));
+
+                    // Servicios
+                    if (listBoxServicios.Items.Count > 0)
+                    {
+                        doc.Add(new Paragraph("Servicios Extra:", boldSub));
+                        foreach (var item in listBoxServicios.Items)
+                            doc.Add(new Paragraph(item.ToString(), normal));
+                        doc.Add(new Paragraph("\n"));
+                    }
+
+                    // Descuentos
+                    if (listBoxDescuentos.Items.Count > 0)
+                    {
+                        doc.Add(new Paragraph("Descuentos:", boldSub));
+                        foreach (var item in listBoxDescuentos.Items)
+                            doc.Add(new Paragraph(item.ToString(), normal));
+                        doc.Add(new Paragraph("\n"));
+                    }
+
+                    // Totales
+                    doc.Add(new Paragraph("Totales", boldSub));
+                    doc.Add(new Paragraph($"Subtotal: ${subtotal:F2}", normal));
+                    doc.Add(new Paragraph($"IVA (16%): ${(subtotal * 0.16m):F2}", normal));
+                    doc.Add(new Paragraph($"Total: ${total:F2}", normal));
+                    doc.Add(new Paragraph($"Método de Pago: {metodoPago}", normal));
+                    doc.Add(new Paragraph($"Forma de Pago: {formaPago}", normal));
+                    doc.Add(new Paragraph("\n"));
+
+                    // Sellos
+                    doc.Add(new Paragraph("Sello Digital CFDI", boldSub));
+                    doc.Add(new Paragraph(selloCFDI, normal));
+                    doc.Add(new Paragraph("Sello SAT", boldSub));
+                    doc.Add(new Paragraph(selloSAT, normal));
+                    doc.Add(new Paragraph("Cadena de Certificación", boldSub));
+                    doc.Add(new Paragraph(cadenaSAT, normal));
+
+                    doc.Close();
+                }
+
+                MessageBox.Show($"Factura generada exitosamente en:\n{path}", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
 
         //RFC del hotel
         private void label30_Click(object sender, EventArgs e)
         {
 
         }
+
     }
 }
