@@ -73,6 +73,7 @@
             this.Controls.Add(this.label4);
             this.Name = "uc_CheckIn";
             this.Size = new System.Drawing.Size(1149, 722);
+            this.Load += new System.EventHandler(this.uc_CheckIn_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

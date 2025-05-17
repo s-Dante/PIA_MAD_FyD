@@ -53,5 +53,10 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                 MessageBox.Show("Error al realizar el check-in: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void uc_CheckIn_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -79,6 +79,24 @@ namespace PIA_MAD_FyD.Forms.Operatives
 
         }
 
+        private T GetActiveUserControl<T>() where T : UserControl
+        {
+            if (panel3.Controls.Count > 0 && panel3.Controls[0] is T control)
+            {
+                return control;
+            }
+            return null;
+        }
+
+        public void ReiniciarUserControlReservaciones()
+        {
+            var ucReservaciones = GetActiveUserControl<uc_Reservaciones>();
+            if (ucReservaciones != null)
+            {
+                ucReservaciones.ReiniciarFormulario();
+            }
+        }
+
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 

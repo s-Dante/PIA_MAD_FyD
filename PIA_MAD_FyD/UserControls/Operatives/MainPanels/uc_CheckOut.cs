@@ -52,6 +52,7 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
             }
         }
 
+
         //Codigo de Reservacion
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
@@ -113,7 +114,7 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
         {
             try
             {
-                int usuarioRegistrador = 1; // Usuario actual
+                int usuarioRegistrador = usuarioLogeado.num_Nomina;
                 idCheckOut = Reservacion_DAO.RealizarCheckOut(idReservacionActual, usuarioRegistrador);
 
                 if (idCheckOut > 0)
@@ -133,15 +134,31 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
             }
         }
 
+
         private void RegistrarServiciosSeleccionados()
         {
             try
             {
+                if (idCheckOut <= 0)
+                {
+                    MessageBox.Show("No se ha registrado el Check-Out correctamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 List<string> serviciosSeleccionadosNombres = new List<string>();
+                List<string> descuentosSeleccionadosNombres = new List<string>();
 
                 foreach (var item in checkedListBox1.CheckedItems)
                 {
-                    serviciosSeleccionadosNombres.Add(item.ToString());
+                    if (item is ServiciosExtra servicio)
+                    {
+                        serviciosSeleccionadosNombres.Add(servicio.nombre);
+                    }
+
+                    if (item is Descuento descuento)
+                    {
+                        descuentosSeleccionadosNombres.Add(descuento.nombre);
+                    }
                 }
 
                 // Obtener los IDs de los servicios seleccionados
@@ -149,14 +166,41 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
 
                 if (serviciosSeleccionadosIds.Count > 0)
                 {
-                    Reservacion_DAO.RegistrarServiciosCheckOut(idCheckOut, serviciosSeleccionadosIds);
+                    Reservacion_DAO.RegistrarServiciosCheckOut(idCheckOut, idReservacionActual, checkedListBox1);
+                }
+
+                // Obtener los IDs de los descuentos seleccionados
+                List<int> descuentosSeleccionadosIds = Reservacion_DAO.ObtenerIdsDescuentos(descuentosSeleccionadosNombres);
+
+                // Registrar los descuentos seleccionados
+                if (descuentosSeleccionadosIds.Count > 0)
+                {
+                    Reservacion_DAO.RegistrarDescuentosCheckOut(idCheckOut, idReservacionActual);
+                }
+
+
+                // Calcular el monto total
+                decimal montoTotal = Reservacion_DAO.CalcularMontoTotal(idReservacionActual, idCheckOut);
+
+                if (montoTotal >= 0)
+                {
+                    // Proceder a la ventana de pago
+                    Form operatividad = new Operatividad(usuarioLogeado);
+                    FormManager.ShowFormParams<FormPago>(operatividad, cerrarAppAlCerrar: false, ocultarActual: true, idCheckOut, montoTotal, usuarioLogeado);
+                }
+                else
+                {
+                    MessageBox.Show("Error al calcular el monto total. Verifique los datos y vuelva a intentarlo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al registrar los servicios extra: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al registrar los servicios extra y proceder al pago: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
 
         //Boton de imprimir
         private void button3_Click(object sender, EventArgs e)

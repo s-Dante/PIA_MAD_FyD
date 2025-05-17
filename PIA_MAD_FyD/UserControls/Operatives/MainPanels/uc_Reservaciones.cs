@@ -11,6 +11,7 @@ using PIA_MAD_FyD.Data.Entidades;
 using PIA_MAD_FyD.Data.DAO_s;
 using PIA_MAD_FyD.Services.CountryData;
 using System.IO;
+using PIA_MAD_FyD.Forms.Operatives;
 
 namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
 {
@@ -582,6 +583,7 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                 Reservacion_DAO.CancelarReservacionesSinCheckIn();
 
                 MessageBox.Show("Reservaciones sin check-in canceladas exitosamente.", "Proceso Completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                System.Threading.Thread.Sleep(200);
             }
             catch (Exception ex)
             {
@@ -606,6 +608,10 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                                      $"Anticipo: {reservaInfo["anticipo_Pagado"]}";
 
                     MessageBox.Show(mensaje, "Reserva Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (this.ParentForm is Operatividad operatividadForm)
+                    {
+                        operatividadForm.ReiniciarUserControlReservaciones();
+                    }
                 }
                 else
                 {
@@ -619,6 +625,22 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
 
         }
 
+        public void ReiniciarFormulario()
+        {
+            // Reiniciar DateTimePickers a sus valores iniciales o predeterminados
+            dateTimePicker1.Value = DateTime.Now;
+            dateTimePicker2.Value = DateTime.Now.AddDays(1);
+
+            // Reiniciar NumericUpDowns
+            numericUpDown1.Value = 0;
+            numericUpDown2.Value = 1;
+
+            // Limpiar listas o selecciones
+            habitacionesSeleccionadas.Clear();
+
+            // Puedes limpiar otros controles si tienes más
+            // Por ejemplo, TextBoxes, ComboBoxes, etc.
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
