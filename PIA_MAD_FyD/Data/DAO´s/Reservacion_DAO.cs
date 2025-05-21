@@ -229,19 +229,26 @@ namespace PIA_MAD_FyD.Data.DAO_s
         }
 
         // 3. Obtener servicios extra disponibles
-        public static List<string> ObtenerServiciosExtras()
+        public static List<ServiciosExtra> ObtenerServiciosExtras()
         {
-            List<string> servicios = new List<string>();
+            List<ServiciosExtra> servicios = new List<ServiciosExtra>();
             try
             {
                 using (SqlConnection conexion = BD_Connection.ObtenerConexion())
                 {
-                    SqlCommand comando = new SqlCommand("SELECT nombre FROM tbl_ServicioExtra", conexion);
+                    SqlCommand comando = new SqlCommand("SELECT * FROM tbl_ServicioExtra", conexion);
                     using (SqlDataReader reader = comando.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            servicios.Add(reader["nombre"].ToString());
+                            ServiciosExtra servicio = new ServiciosExtra
+                            {
+                                id_ServicioExtrta = (int)reader["id_ServicioExtra"],
+                                nombre = reader["nombre"].ToString(),
+                                descripcion = reader["descripcion"].ToString(),
+                                precion = (decimal)reader["precio"]
+                            };
+                            servicios.Add(servicio);
                         }
                     }
                 }
@@ -252,6 +259,7 @@ namespace PIA_MAD_FyD.Data.DAO_s
             }
             return servicios;
         }
+
 
         public static List<int> ObtenerIdsServiciosExtras(List<string> nombresServicios)
         {
@@ -295,36 +303,66 @@ namespace PIA_MAD_FyD.Data.DAO_s
 
 
         // 4. Registrar servicios seleccionados en el check-out
-        public static void RegistrarServiciosCheckOut(int idCheckOut, Guid idReservacion, CheckedListBox listbox)
+        public static bool RegistrarServiciosCheckOut(int idCheckOut, List<int> serviciosIds)
         {
-            try
+            using (SqlConnection connection = BD_Connection.ObtenerConexion())
             {
-                using (SqlConnection conexion = BD_Connection.ObtenerConexion())
-                {
-                    foreach (var item in listbox.CheckedItems)
-                    {
-                        var servicio = item as ServiciosExtra;  // Asegúrate de que este sea el tipo correcto
-                        if (servicio != null)
-                        {
-                            string query = @"
-                    INSERT INTO tbl_ServicioCheckOut (id_CheckOut, id_ServicioExtra)
-                    VALUES (@idCheckOut, @idServicioExtra)";
+                SqlTransaction transaction = connection.BeginTransaction();
 
-                            using (SqlCommand cmd = new SqlCommand(query, conexion))
-                            {
-                                cmd.Parameters.AddWithValue("@idCheckOut", idCheckOut);
-                                cmd.Parameters.AddWithValue("@idServicioExtra", servicio.id_ServicioExtrta);
-                                cmd.ExecuteNonQuery();
-                            }
+                try
+                {
+                    foreach (int servicioId in serviciosIds)
+                    {
+                        string query = "INSERT INTO tbl_ServicioCheckOut (id_CheckOut, id_ServicioExtra) VALUES (@idCheckOut, @idServicioExtra)";
+                        using (SqlCommand cmd = new SqlCommand(query, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@idCheckOut", idCheckOut);
+                            cmd.Parameters.AddWithValue("@idServicioExtra", servicioId);
+                            cmd.ExecuteNonQuery();
                         }
                     }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
                 }
             }
-            catch (Exception ex)
+        }
+
+        public static bool RegistrarDescuentosCheckOut(int idCheckOut, List<int> descuentosIds)
+        {
+            using (SqlConnection connection = BD_Connection.ObtenerConexion())
             {
-                MessageBox.Show("Error al registrar servicios: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SqlTransaction transaction = connection.BeginTransaction();
+
+                try
+                {
+                    foreach (int descuentoId in descuentosIds)
+                    {
+                        string query = "INSERT INTO tbl_DescuentoCheckOut (id_CheckOut, id_Descuento) VALUES (@idCheckOut, @idDescuento)";
+                        using (SqlCommand cmd = new SqlCommand(query, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@idCheckOut", idCheckOut);
+                            cmd.Parameters.AddWithValue("@idDescuento", descuentoId);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
             }
         }
+
 
 
 
@@ -494,15 +532,16 @@ namespace PIA_MAD_FyD.Data.DAO_s
 
                     // 3.4. Descuento por grupo (10% si más de 8 personas)
                     string queryGrupo = @"
-            SELECT COUNT(*) 
-            FROM tbl_PersonasReserva pr
-            WHERE pr.id_Reservacion = @idReservacion";
+            SELECT cant_Huespedes 
+            FROM tbl_Reservacion 
+            WHERE id_Reservacion = @idReservacion";
 
                     int numeroPersonas = 0;
                     using (SqlCommand cmd = new SqlCommand(queryGrupo, conexion))
                     {
                         cmd.Parameters.AddWithValue("@idReservacion", idReservacion);
-                        numeroPersonas = (int)cmd.ExecuteScalar();
+                        object resultado = cmd.ExecuteScalar();
+                        numeroPersonas = resultado != DBNull.Value ? Convert.ToInt32(resultado) : 0;
                     }
 
                     if (numeroPersonas > 8)
@@ -553,51 +592,61 @@ namespace PIA_MAD_FyD.Data.DAO_s
             {
                 List<string> descuentosAutomaticos = new List<string>();
 
-                // 1. Estancia Prolongada (Ejemplo: si la estancia es mayor a 7 noches)
                 if (EsEstanciaProlongada(idReservacion))
                 {
-                    Console.WriteLine("Descuento de Estancia Prolongada aplicado.");
+                    Console.WriteLine("Aplicando descuento: Estancia Prolongada");
                     descuentosAutomaticos.Add("Estancia Prolongada");
                 }
 
-                // 2. Temporada Baja (Ejemplo: si la fecha actual está en temporada baja)
                 if (EsTemporadaBaja())
                 {
-                    Console.WriteLine("Descuento de Temporada Baja aplicado.");
+                    Console.WriteLine("Aplicando descuento: Temporada Baja");
                     descuentosAutomaticos.Add("Temporada Baja");
                 }
 
-                // 3. Pago Anticipado (Ejemplo: si el cliente pagó por adelantado)
                 if (EsPagoAnticipado(idReservacion))
                 {
-                    Console.WriteLine("Descuento de Pago Anticipado aplicado.");
+                    Console.WriteLine("Aplicando descuento: Pago Anticipado");
                     descuentosAutomaticos.Add("Pago Anticipado");
                 }
 
-                // 4. Descuento por Grupo (Ejemplo: si el cliente está en un grupo)
                 if (EsDescuentoPorGrupo(idReservacion))
                 {
-                    Console.WriteLine("Descuento de Descuento por Grupo aplicado.");
+                    Console.WriteLine("Aplicando descuento: Descuento por Grupo");
                     descuentosAutomaticos.Add("Descuento por Grupo");
                 }
 
-                // Verificar si la lista está vacía antes de proceder
+                Console.WriteLine("Descuentos detectados: " + string.Join(", ", descuentosAutomaticos));
+
+                // Mostrar los descuentos aplicados o un mensaje si no hay descuentos
                 if (descuentosAutomaticos.Count == 0)
                 {
-                    throw new Exception("No se aplican descuentos automáticos.");
+                    MessageBox.Show("No se aplicaron descuentos.", "Descuentos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    string mensajeDescuentos = "Se aplicaron los siguientes descuentos:\n\n";
+                    foreach (string descuento in descuentosAutomaticos)
+                    {
+                        mensajeDescuentos += $"- {descuento}\n";
+                    }
+
+                    MessageBox.Show(mensajeDescuentos, "Descuentos Aplicados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                // Obtener los IDs de los descuentos automáticamente aplicados
-                List<int> descuentoIds = Reservacion_DAO.ObtenerIdsDescuentos(descuentosAutomaticos);
+                // Si no hay descuentos, retornamos aquí para evitar consultas innecesarias
+                if (descuentosAutomaticos.Count == 0)
+                {
+                    return false;
+                }
 
+                List<int> descuentoIds = ObtenerIdsDescuentos(descuentosAutomaticos);
                 if (descuentoIds.Count == 0)
                 {
-                    throw new Exception("No se pudieron obtener los IDs de los descuentos.");
+                    Console.WriteLine("No se encontraron IDs para los descuentos.");
+                    return false;
                 }
 
-                Console.WriteLine("Descuentos a aplicar: " + string.Join(", ", descuentoIds));
-
-                // Registrar los descuentos en la base de datos
                 using (SqlConnection conexion = BD_Connection.ObtenerConexion())
                 {
                     foreach (int idDescuento in descuentoIds)
@@ -622,10 +671,13 @@ namespace PIA_MAD_FyD.Data.DAO_s
             {
                 exito = false;
                 Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("Error al registrar los descuentos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return exito;
         }
+
+
 
 
         // Función para determinar si la estancia es prolongada (mayor a 7 noches)
@@ -634,26 +686,33 @@ namespace PIA_MAD_FyD.Data.DAO_s
             using (SqlConnection conexion = BD_Connection.ObtenerConexion())
             {
                 string query = @"
-        SELECT DATEDIFF(DAY, fecha_Ini, fecha_Fin) 
-        FROM tbl_Reservacion
-        WHERE id_Reservacion = @idReservacion";
+            SELECT DATEDIFF(DAY, fecha_Ini, fecha_Fin) 
+            FROM tbl_Reservacion
+            WHERE id_Reservacion = @idReservacion";
 
                 using (SqlCommand cmd = new SqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idReservacion", idReservacion);
                     object resultado = cmd.ExecuteScalar();
-                    return resultado != DBNull.Value && Convert.ToInt32(resultado) > 7;
+
+                    int diasEstancia = resultado != DBNull.Value ? Convert.ToInt32(resultado) : 0;
+                    Console.WriteLine($"Días de estancia: {diasEstancia}");
+
+                    return diasEstancia > 7;
                 }
             }
         }
+
 
         // Función para determinar si es temporada baja (según la fecha actual)
         private static bool EsTemporadaBaja()
         {
             DateTime fechaActual = DateTime.Now;
-            // Por ejemplo, si la temporada baja es entre enero y marzo
-            return fechaActual.Month >= 1 && fechaActual.Month <= 3;
+            bool esTemporadaBaja = fechaActual.Month >= 1 && fechaActual.Month <= 3;
+            Console.WriteLine($"Fecha actual: {fechaActual}, ¿Es temporada baja? {esTemporadaBaja}");
+            return esTemporadaBaja;
         }
+
 
         // Función para determinar si el cliente ha hecho un pago anticipado
         private static bool EsPagoAnticipado(Guid idReservacion)
@@ -661,38 +720,51 @@ namespace PIA_MAD_FyD.Data.DAO_s
             using (SqlConnection conexion = BD_Connection.ObtenerConexion())
             {
                 string query = @"
-        SELECT anticipo_Pagado
-        FROM tbl_Reservacion
-        WHERE id_Reservacion = @idReservacion";
+            SELECT anticipo_Pagado
+            FROM tbl_Reservacion
+            WHERE id_Reservacion = @idReservacion";
 
                 using (SqlCommand cmd = new SqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idReservacion", idReservacion);
                     object resultado = cmd.ExecuteScalar();
-                    return resultado != DBNull.Value && Convert.ToDecimal(resultado) > 0;
+
+                    decimal anticipo = resultado != DBNull.Value ? Convert.ToDecimal(resultado) : 0;
+                    Console.WriteLine($"Anticipo pagado: {anticipo}");
+
+                    return anticipo > 0;
                 }
             }
         }
+
 
         // Función para determinar si el cliente tiene descuento por grupo
         private static bool EsDescuentoPorGrupo(Guid idReservacion)
         {
-            // Suponemos que hay un campo en la reservación que indica si es un grupo
             using (SqlConnection conexion = BD_Connection.ObtenerConexion())
             {
                 string query = @"
-        SELECT es_Grupo
-        FROM tbl_Reservacion
-        WHERE id_Reservacion = @idReservacion";
+            SELECT cant_Huespedes
+            FROM tbl_Reservacion
+            WHERE id_Reservacion = @idReservacion";
 
                 using (SqlCommand cmd = new SqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idReservacion", idReservacion);
                     object resultado = cmd.ExecuteScalar();
-                    return resultado != DBNull.Value && Convert.ToBoolean(resultado);
+
+                    int cantidadHuespedes = resultado != DBNull.Value ? Convert.ToInt32(resultado) : 0;
+
+                    // Definimos que un grupo es de 4 o más huéspedes
+                    bool esGrupo = cantidadHuespedes >= 8;
+
+                    Console.WriteLine($"Cantidad de huéspedes: {cantidadHuespedes}, ¿Es grupo? {esGrupo}");
+
+                    return esGrupo;
                 }
             }
         }
+
 
 
         public static List<int> ObtenerIdsDescuentos(List<string> descuentosNombres)

@@ -221,6 +221,8 @@ namespace PIA_MAD_FyD.UserControls.Operatives.MainPanels
                 countryAuto.Add(country.name);
             }
             comboBox1.AutoCompleteCustomSource = countryAuto;
+
+            numericUpDown2.Minimum = 1;
         }
 
         private void uc_Reservaciones_Load(object sender, EventArgs e)

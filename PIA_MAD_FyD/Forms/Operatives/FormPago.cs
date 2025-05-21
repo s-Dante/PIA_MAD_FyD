@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PIA_MAD_FyD.Data.DAO_s;
 using PIA_MAD_FyD.Data.Entidades;
+using PIA_MAD_FyD.Helpers;
 using PIA_MAD_FyD.Helpers.FormManager;
 
 namespace PIA_MAD_FyD.Forms.Operatives
@@ -20,14 +21,72 @@ namespace PIA_MAD_FyD.Forms.Operatives
 
         Usuario usuarioLogeado;
 
+
+        BorderRadius borderRadius = new BorderRadius();
+
+
         public FormPago(int idCheckOut, decimal montoTotal, Usuario usuarioLogeado)
         {
             InitializeComponent();
             this.idCheckOut = idCheckOut;
             this.montoTotal = montoTotal;
+
             label2.Text = $"{montoTotal}";
 
             this.usuarioLogeado = usuarioLogeado;
+
+            borderRadius.TargetControl = this;
+            borderRadius.CornerRadius = 25;
+            borderRadius.CornersToRound = BorderRadius.RoundedCorners.All;
+
+            CargarConceptosPago();
+        }
+
+        private void CargarConceptosPago()
+        {
+            listBox1.Items.Clear();
+
+            decimal costoBase = Pago_DAO.ObtenerCostoBase(idCheckOut);
+            List<ServiciosExtra> serviciosExtras = Pago_DAO.ObtenerServiciosExtra(idCheckOut);
+            List<string> descuentos = Pago_DAO.ObtenerDescuentos(idCheckOut);
+            decimal anticipo = Pago_DAO.ObtenerAnticipo(idCheckOut);
+
+            // Mostrar costo base
+            listBox1.Items.Add($"Costo Base: {costoBase:C}");
+
+            // Mostrar servicios extra
+            if (serviciosExtras.Count > 0)
+            {
+                listBox1.Items.Add("Servicios Extra:");
+                foreach (var servicio in serviciosExtras)
+                {
+                    listBox1.Items.Add($"  - {servicio.nombre}: {servicio.precion:C}");
+                }
+            }
+
+            // Mostrar descuentos
+            if (descuentos.Count > 0)
+            {
+                listBox1.Items.Add("Descuentos Aplicados:");
+                foreach (var descuento in descuentos)
+                {
+                    listBox1.Items.Add($"  - {descuento}");
+                }
+            }
+            else
+            {
+                listBox1.Items.Add("No se aplicaron descuentos.");
+            }
+
+            // Mostrar anticipo
+            if (anticipo > 0)
+            {
+                listBox1.Items.Add($"Anticipo Pagado: -{anticipo:C}");
+            }
+
+            // Mostrar total final
+            listBox1.Items.Add("-----------------------------");
+            listBox1.Items.Add($"Total a Pagar: {montoTotal:C}");
         }
 
         private void Pago_Load(object sender, EventArgs e)
@@ -98,6 +157,12 @@ namespace PIA_MAD_FyD.Forms.Operatives
         private void button1_Click(object sender, EventArgs e)
         {
             FormManager.CloseForm<FormPago>();
+        }
+
+        //Informacion de pago
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

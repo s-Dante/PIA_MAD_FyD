@@ -199,34 +199,61 @@ namespace PIA_MAD_FyD.UserControls.Admin.MainPanels
                 return;
             }
 
+            string nivelSeleccionado = comboBox2.Text;
             char nivel;
-            switch (comboBox2.SelectedItem.ToString())
+            if (nivelSeleccionado.Length > 0)
             {
-                case "Estandar": nivel = 'E'; break;
-                case "Doble": nivel = 'D'; break;
-                case "Suite": nivel = 'S'; break;
-                case "Presidencial": nivel = 'P'; break;
-                default: nivel = 'O'; break;
+                switch (nivelSeleccionado)
+                {
+                    case "Estandar": nivel = 'E'; break;
+                    case "Doble": nivel = 'D'; break;
+                    case "Suite": nivel = 'S'; break;
+                    case "Presidencial": nivel = 'P'; break;
+                    default: nivel = 'O'; break;
+                }
+            }
+            else
+            {  
+                MessageBox.Show("Debe seleccionar el nivel de la habitacion", "AVISO", MessageBoxButtons.OK) ; return;
             }
 
+            
+            
+            string vistaSeleccionada = comboBox3.Text;
             char vista;
-            switch (comboBox3.SelectedItem.ToString())
+            if (vistaSeleccionada.Length > 0)
             {
-                case "Al mar": vista = 'M'; break;
-                case "A la Alberca": vista = 'A'; break;
-                case "A la Ciudad": vista = 'C'; break;
-                case "Al Jardin": vista = 'J'; break;
-                default: vista = 'O'; break;
+                switch (vistaSeleccionada)
+                {
+                    case "Al mar": vista = 'M'; break;
+                    case "A la Alberca": vista = 'A'; break;
+                    case "A la Ciudad": vista = 'C'; break;
+                    case "Al Jardin": vista = 'J'; break;
+                    default: vista = 'O'; break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar la vista de la habitacion", "AVISO", MessageBoxButtons.OK); return;
             }
 
+            string tipoCamaSeleccionado = comboBox1.Text;
             char tipoCama;
-            switch (comboBox1.SelectedItem.ToString())
+            if (tipoCamaSeleccionado.Length > 0)
             {
-                case "Individual": tipoCama = 'I'; break;
-                case "Matrimonial": tipoCama = 'M'; break;
-                case "Queen Size": tipoCama = 'Q'; break;
-                default: tipoCama = 'K'; break;
+                switch (tipoCamaSeleccionado)
+                {
+                    case "Individual": tipoCama = 'I'; break;
+                    case "Matrimonial": tipoCama = 'M'; break;
+                    case "Queen Size": tipoCama = 'Q'; break;
+                    default: tipoCama = 'K'; break;
+                }
             }
+            else
+            {
+                MessageBox.Show("Debe seleccionar el tipo de cama de la habitacion", "AVISO", MessageBoxButtons.OK); return;
+            }
+
 
             Habitacion nuevaHabitacion = new Habitacion();
 
